@@ -14,6 +14,7 @@
       --cyan: #22D3EE;
       --gold: #FBBF24;
       --green: #34D399;
+      --red: #F87171;
       --text: #F0EEFF;
       --muted: #8B85A8;
     }
@@ -26,187 +27,120 @@
     }
     body::after {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background:
         radial-gradient(ellipse at 10% 10%, rgba(124,58,237,0.15) 0%, transparent 50%),
         radial-gradient(ellipse at 90% 90%, rgba(34,211,238,0.1) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
+    #app { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 0 0 80px; }
 
-    #app {
-      position: relative;
-      z-index: 1;
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 0 0 80px;
-    }
-
-    /* ======= タイトル ======= */
+    /* タイトル */
     #s-title {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 48px 24px; text-align: center;
     }
-    .title-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid rgba(124,58,237,0.5);
-      border-radius: 99px;
-      padding: 5px 16px;
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--cyan);
-      margin-bottom: 32px;
-    }
-    .title-emoji { font-size: 80px; margin-bottom: 28px; animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .title-eyebrow { font-size: 12px; letter-spacing: 3px; color: var(--cyan); font-weight: bold; margin-bottom: 24px; }
     .title-h1 {
-      font-size: clamp(28px, 8vw, 44px);
-      font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 16px;
+      font-size: clamp(30px, 9vw, 52px); font-weight: 900; line-height: 1.2; margin-bottom: 20px;
       background: linear-gradient(135deg, #fff 20%, var(--cyan));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .title-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 48px; }
+    .title-hook { font-size: 18px; color: var(--muted); line-height: 1.9; margin-bottom: 48px; }
+    .title-hook strong { color: var(--text); }
+    .title-emoji { font-size: 72px; margin-bottom: 32px; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
     .btn-start {
-      padding: 18px 48px;
-      background: linear-gradient(135deg, var(--primary), #9333EA);
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 99px;
-      cursor: pointer;
-      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
-      transition: transform 0.1s;
-      -webkit-tap-highlight-color: transparent;
+      padding: 20px 56px; background: linear-gradient(135deg, var(--primary), #9333EA);
+      color: #fff; font-size: 18px; font-weight: bold; border: none; border-radius: 99px;
+      cursor: pointer; box-shadow: 0 8px 32px rgba(124,58,237,0.5);
+      transition: transform 0.1s; -webkit-tap-highlight-color: transparent;
     }
     .btn-start:active { transform: scale(0.96); }
 
-    /* ======= ノベル画面 ======= */
+    /* ノベル */
     #s-novel { display: none; min-height: 100vh; }
-
     .novel-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(8,6,20,0.9);
-      backdrop-filter: blur(8px);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(8,6,20,0.92); backdrop-filter: blur(10px);
+      padding: 12px 20px; display: flex; align-items: center; gap: 12px;
     }
     .chapter-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-    .chapter-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--cyan)); border-radius: 3px; transition: width 0.5s; }
-    .chapter-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .chapter-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--cyan)); border-radius: 3px; transition: width 0.6s ease; }
+    .chapter-label { font-size: 11px; color: var(--muted); white-space: nowrap; font-weight: bold; }
 
     .scene-wrap {
-      padding: 32px 24px 24px;
-      min-height: calc(100vh - 60px);
-      display: flex;
-      flex-direction: column;
+      padding: 36px 24px 24px; min-height: calc(100vh - 60px);
+      display: flex; flex-direction: column; cursor: pointer;
     }
+    .scene-icon { font-size: 52px; text-align: center; margin-bottom: 24px; }
+    .scene-chapter { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 16px; }
+    .scene-text { font-size: 17px; line-height: 2.1; flex: 1; }
+    .scene-text .em  { color: var(--gold); font-weight: bold; }
+    .scene-text .hi  { color: var(--cyan); font-weight: bold; }
+    .scene-text .gr  { color: var(--green); font-weight: bold; }
+    .scene-text .rd  { color: var(--red); font-weight: bold; }
+    .scene-text .lg  { font-size: 22px; font-weight: 900; line-height: 1.5; }
 
-    .scene-icon { font-size: 56px; text-align: center; margin-bottom: 24px; }
-    .scene-chapter {
-      font-size: 11px; font-weight: bold; letter-spacing: 2px;
-      color: var(--cyan); margin-bottom: 12px;
-    }
-    .scene-text {
-      font-size: 16px; line-height: 2; flex: 1;
-      white-space: pre-wrap;
-    }
-    .scene-text .em { color: var(--gold); font-weight: bold; }
-    .scene-text .hi { color: var(--cyan); font-weight: bold; }
-    .scene-text .gr { color: var(--green); font-weight: bold; }
-
-    /* タイプライター */
-    .typewriter::after {
-      content: '▊';
-      animation: blink 0.7s infinite;
-      color: var(--cyan);
-    }
+    .typewriter-cursor::after { content: '▊'; animation: blink 0.7s infinite; color: var(--cyan); margin-left: 2px; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .tap-hint {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      padding: 20px 0 0;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .tap-hint { text-align: center; font-size: 13px; color: var(--muted); padding: 24px 0 0; animation: fadepulse 1.8s infinite; }
+    @keyframes fadepulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
     /* 選択肢 */
-    .choices-wrap { padding: 0 24px 32px; }
-    .choices-title { font-size: 14px; color: var(--muted); margin-bottom: 16px; text-align: center; }
+    .choices-wrap { padding: 36px 24px 32px; }
+    .choices-title { font-size: 20px; font-weight: 800; line-height: 1.4; margin-bottom: 28px; color: var(--text); }
     .choice-btn {
-      display: block; width: 100%;
-      padding: 18px 20px;
-      background: var(--surface);
-      border: 2px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      color: var(--text);
-      font-size: 15px; font-weight: 600;
-      text-align: left; cursor: pointer;
-      margin-bottom: 12px;
-      line-height: 1.5;
+      display: block; width: 100%; padding: 20px 20px;
+      background: var(--surface); border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 16px; color: var(--text); font-size: 15px; font-weight: 600;
+      text-align: left; cursor: pointer; margin-bottom: 12px; line-height: 1.6;
       transition: border-color 0.2s, background 0.2s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
     .choice-btn:active { transform: scale(0.98); }
-    .choice-btn:hover { border-color: var(--primary); background: rgba(124,58,237,0.1); }
+    .choice-btn:hover { border-color: var(--primary); background: rgba(124,58,237,0.12); }
 
     /* エンディング */
-    .ending-wrap { padding: 24px; text-align: center; }
-    .ending-icon { font-size: 72px; margin-bottom: 20px; animation: float 2s ease-in-out infinite; }
+    .ending-wrap { padding: 36px 24px 48px; text-align: center; }
+    .ending-icon { font-size: 80px; margin-bottom: 20px; animation: float 2s ease-in-out infinite; }
     .ending-h2 {
-      font-size: clamp(22px, 6vw, 32px); font-weight: 900;
-      line-height: 1.3; margin-bottom: 12px;
+      font-size: clamp(24px, 6vw, 36px); font-weight: 900; line-height: 1.2; margin-bottom: 12px;
       background: linear-gradient(135deg, var(--gold), #F97316);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .ending-sub { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+    .ending-sub { font-size: 16px; color: var(--muted); line-height: 1.9; margin-bottom: 32px; }
+    .ending-sub strong { color: var(--text); }
     .price-box {
       background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(34,211,238,0.15));
-      border: 1px solid rgba(124,58,237,0.4);
-      border-radius: 20px;
-      padding: 24px; margin-bottom: 20px;
-      text-align: center;
+      border: 1px solid rgba(124,58,237,0.5); border-radius: 20px;
+      padding: 28px 24px; margin-bottom: 20px;
     }
     .price-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .price-num { font-size: 44px; font-weight: 900; color: var(--gold); line-height: 1; }
-    .price-note { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+    .price-num { font-size: 48px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .price-cross { font-size: 14px; color: var(--muted); text-decoration: line-through; margin-bottom: 6px; }
+    .price-note { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
     .btn-cta {
-      display: block; width: 100%;
-      padding: 20px 24px;
+      display: block; width: 100%; padding: 22px 24px;
       background: linear-gradient(135deg, var(--gold), #F97316);
       color: #fff; font-size: 20px; font-weight: 900;
       border: none; border-radius: 14px; cursor: pointer;
-      box-shadow: 0 6px 32px rgba(245,158,11,0.4);
-      transition: transform 0.1s;
-      -webkit-tap-highlight-color: transparent;
-      text-decoration: none; text-align: center;
+      box-shadow: 0 6px 32px rgba(245,158,11,0.45);
+      transition: transform 0.1s; -webkit-tap-highlight-color: transparent;
+      text-decoration: none; text-align: center; margin-bottom: 12px;
     }
     .btn-cta:active { transform: scale(0.97); }
-    .share-row { display: flex; gap: 10px; margin-top: 10px; }
+    .share-row { display: flex; gap: 10px; margin-top: 4px; }
     .btn-share {
-      flex: 1; padding: 12px;
+      flex: 1; padding: 13px;
       background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px; color: var(--text); font-size: 13px;
       cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-    .footer { font-size: 11px; color: var(--muted); text-align: center; margin-top: 20px; line-height: 1.8; }
+    .footer { font-size: 11px; color: var(--muted); text-align: center; margin-top: 24px; line-height: 1.8; }
   </style>
 </head>
 <body>
@@ -214,10 +148,14 @@
 
   <!-- タイトル -->
   <div id="s-title">
-    <div class="title-badge">🌊 RAML STORY</div>
+    <div class="title-eyebrow">🌊 RAML STORY</div>
     <div class="title-emoji">🎬</div>
-    <h1 class="title-h1">あなたの<br>3ヶ月後の物語</h1>
-    <p class="title-desc">AI動画・画像生成に興味があるあなた。<br>もしRAMLに出会ったら、<br>3ヶ月後はどうなっているだろう？</p>
+    <h1 class="title-h1">もし、あのとき<br>動いていたら。</h1>
+    <p class="title-hook">
+      <strong>AIに興味はある。でも、1人では動けない。</strong><br>
+      そんなあなたが、もしRAMLに出会ったら——<br>
+      3ヶ月後の物語を体験してみてください。
+    </p>
     <button class="btn-start" onclick="startNovel()">物語をはじめる →</button>
   </div>
 
@@ -231,312 +169,513 @@
   </div>
 
 </div>
-
 <script>
 const RAML_URL = '#'; // ← 入会URLをここに
 
-// ===== シナリオ定義 =====
-// type: 'scene' | 'choice' | 'ending'
+// ============================================================
+// シナリオデータ
+// ============================================================
 
 const COMMON_INTRO = [
   {
-    type: 'scene',
-    chapter: 'CHAPTER 1 ── 始まりの悩み',
-    icon: '😔',
-    progress: 5,
-    text: `あなたはAI画像生成・動画生成が\n気になって仕方がない。\n\nSNSに流れてくるAI動画の\nクオリティに驚き、\n「自分でも作れたら…」と思う日々。\n\nでも、<em>何から始めればいいのか</em>、全くわからない。`,
+    type:'scene', chapter:'CHAPTER 1', icon:'📱', progress:5,
+    text:`また今日も、眺めるだけで終わった。
+
+スクロールするたびに流れてくる、AIで作られた動画たち。
+
+「すごい」と思う。
+「自分でも作れたら」と思う。
+でも、指が止まる。
+
+<rd>——どこから始めればいいんだろう。</rd>`
   },
   {
-    type: 'scene',
-    chapter: 'CHAPTER 1 ── 始まりの悩み',
-    icon: '🌊',
-    progress: 10,
-    text: `「AIを使える人が、\n使えない人の仕事を奪う」\n\nそんな言葉がずっと頭に引っかかっている。\n\n<hi>ガラケーからスマホへの転換期</hi>と同じように、\n今まさに時代が変わろうとしていた。`,
+    type:'scene', chapter:'CHAPTER 1', icon:'😩', progress:10,
+    text:`1人で調べてみた。
+
+ツールの種類が多すぎて、何が正解かわからない。
+プロンプトを入れてみても、思い通りにいかない。
+YouTubeで「簡単です」と言っていたのに、
+全然うまくいかない。
+
+そして気づいたら、
+<rd>また何もしない1ヶ月が過ぎていた。</rd>`
   },
   {
-    type: 'choice',
-    progress: 15,
-    question: 'あなたが一番やりたいことは？',
-    choices: [
-      { label: '🛍 自分の商品・サービスをもっと売りたい', key: 'sell' },
-      { label: '📱 SNSで収益化・フォロワーを増やしたい', key: 'sns' },
-      { label: '💼 動画・画像のクライアントワークで稼ぎたい', key: 'client' },
-      { label: '🤔 何がしたいかわからないけど、AIに可能性を感じる', key: 'explore' },
-    ],
+    type:'scene', chapter:'CHAPTER 1', icon:'⏰', progress:14,
+    text:`「AIを使える人が、使えない人の仕事を奪う」
+
+頭のどこかで、その言葉がずっと引っかかっている。
+
+スマホが普及したとき、
+ガラケーを使い続けた人たちがいた。
+
+<em>あの人たちと、同じになりたくない。</em>
+でも、1人ではどうしたらいいのか——`
   },
+  {
+    type:'choice', progress:17,
+    question:'ちょっと聞いてもいい？\nあなたが本当はやりたいことって、何？',
+    choices:[
+      { label:'🛍 自分の商品・サービスをもっと売りたい', key:'sell' },
+      { label:'📱 SNSのフォロワーを増やして収益化したい', key:'sns' },
+      { label:'💼 AI動画・画像で案件を取って稼ぎたい', key:'client' },
+      { label:'🤔 正直、まだよくわからない。でもAIは気になる', key:'explore' },
+    ]
+  }
 ];
 
 const BRANCH = {
-  sell: [
+  sell:[
     {
-      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '🛍', progress: 22,
-      text: `あなたには売りたい商品がある。\n\nでも、SNSの反応は薄い。\n写真は自分で撮っているけど、\n<em>どこかプロっぽさが足りない。</em>\n\n「もし動画やAI画像で商品を魅せられたら…」\nそんなことをずっと考えていた。`,
+      type:'scene', chapter:'CHAPTER 2', icon:'🛍', progress:22,
+      text:`商品はある。
+思い入れもある。
+でも、売れていない。
+
+SNSに投稿しても、反応が薄い。
+写真は自分で撮っているけど、
+<rd>どこかプロっぽさが足りない気がする。</rd>
+
+「AI動画や画像で商品を魅せられたら——」
+そう考えながら、また何もできない1日が終わる。`
     },
-  ],
-  sns: [
     {
-      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '📱', progress: 22,
-      text: `発信はしているが、フォロワーが伸びない。\n\n毎日投稿しても<em>反応がなく</em>、\n正直なところ、モチベーションが下がっていた。\n\n「AI動画やAI画像で差別化できたら」\nそう思いつつも、何も動けていなかった。`,
-    },
+      type:'scene', chapter:'CHAPTER 2', icon:'😔', progress:26,
+      text:`隣の人のSNSは伸びている。
+
+同じような商品なのに、なぜ。
+きっと、<em>「見せ方」が違うんだ。</em>
+
+AI画像、AI動画。
+あの人たちは、もう使いこなしている。
+
+このまま何もしなければ、
+差はどんどん開いていく。`
+    }
   ],
-  client: [
+  sns:[
     {
-      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '💼', progress: 22,
-      text: `動画編集や画像制作を仕事にしたい。\n\nでも今の自分には<em>実績もスキルも足りない</em>。\n独学で試したけど、プロンプトが思い通りにならず\nすぐ止まってしまう。\n\nクライアントの前に出せる作品がなかった。`,
+      type:'scene', chapter:'CHAPTER 2', icon:'📱', progress:22,
+      text:`毎日投稿している。
+なのに、フォロワーが増えない。
+
+「継続が大事」と聞いて、続けてきた。
+でも、<rd>数字はほぼ動かない。</rd>
+
+AIを使えば差別化できるかもしれない——
+そう思っても、何も行動できていない。`
     },
-  ],
-  explore: [
     {
-      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '🤔', progress: 22,
-      text: `AIに可能性は感じる。\n\nでも何に使えばいいのか、\n自分が<em>何をしたいのか</em>もまだわからない。\n\n「とりあえず触ってみようか」\nそう思っても、情報が多すぎて\nどこから手をつければいいか迷っていた。`,
-    },
+      type:'scene', chapter:'CHAPTER 2', icon:'😩', progress:26,
+      text:`収益化の条件、まだ遠い。
+
+フォロワー数、インプレッション、
+どの数字も、なかなか届かない。
+
+発信を続けること自体は好き。
+でも、<em>このままで本当にいいのか</em>、
+最近ずっと考えている。`
+    }
   ],
+  client:[
+    {
+      type:'scene', chapter:'CHAPTER 2', icon:'💼', progress:22,
+      text:`動画や画像の制作を仕事にしたい。
+
+でも今の自分には、<rd>見せられる実績がない。</rd>
+クラウドソーシングを見ても、
+「ポートフォリオを見せて」で終わってしまう。
+
+独学で触ってみたけど、
+プロンプトが思い通りにいかず、
+すぐ止まってしまった。`
+    },
+    {
+      type:'scene', chapter:'CHAPTER 2', icon:'😔', progress:26,
+      text:`スキルがなければ、案件は来ない。
+案件がなければ、実績が積めない。
+
+<rd>この「鶏と卵」から抜け出せない気がする。</rd>
+
+でも、AI動画・画像のスキルを持っている人は
+まだ少ない。今ならまだ、先行できる。
+——それはわかっているのに、動けない。`
+    }
+  ],
+  explore:[
+    {
+      type:'scene', chapter:'CHAPTER 2', icon:'🤔', progress:22,
+      text:`AI、面白そう。
+でも、何に使えばいいのかわからない。
+
+「副業に使える」とも聞く。
+「SNSに使える」とも聞く。
+情報が多すぎて、<rd>どれが自分に合うのか全然わからない。</rd>`
+    },
+    {
+      type:'scene', chapter:'CHAPTER 2', icon:'😩', progress:26,
+      text:`結局、何も始められないまま時間が過ぎる。
+
+「もっと情報を集めてから動こう」
+そう思っていたら、
+<rd>気づいたら半年が経っていた。</rd>
+
+やりたいことが見つかれば動ける気がする。
+でも、1人では何もわからないまま。`
+    }
+  ]
 };
 
 const COMMON_RENTON = [
   {
-    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '📲', progress: 40,
-    text: `ある日、SNSのタイムラインに\n<hi>一本の動画投稿</hi>が流れてきた。\n\n「AIで個人が本格的なCM動画を\n作れる時代が来ました」\n\nその動画のクオリティに\nあなたは思わず手を止めた。`,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'📲', progress:38,
+    text:`そんな日に、
+SNSに1本の動画が流れてきた。
+
+「AIで個人が、本格的な動画を
+1人で作れる時代が来てますよ」
+
+<em>思わず、手が止まった。</em>`
   },
   {
-    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🎬', progress: 48,
-    text: `投稿者は<em>レントン</em>。\n\n理学療法士として働いていたが、\nある日突然、勤め先が廃業。\n妊娠中の妻と4人の子供を抱え、\n収入がゼロになった。\n\nその絶望の中で出会ったのが<hi>AI</hi>だった。`,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'👤', progress:44,
+    text:`投稿者のプロフィールを見た。
+
+<hi>レントン</hi>。
+
+「AIコミュニティRAML主宰」と書いてある。
+でも、なんか——
+
+<em>めちゃくちゃ普通の人っぽい。</em>`
   },
   {
-    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🔥', progress: 55,
-    text: `失敗の連続だった。\n画像は崩れ、思い通りにならない。\n\nそれでも諦めず試行錯誤した結果、\nAI動画・画像生成スキルが武器になり、\n講師業、案件獲得、そして今のビジネスへ。\n\n「<em>環境と仲間があれば、誰でもできる</em>」\nレントンはそう言っていた。`,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💥', progress:50,
+    text:`プロフィールを読んで、驚いた。
+
+理学療法士として働いていたのに、
+ある日突然、勤め先が廃業。
+
+妊娠中の奥さん。
+4人の子供。
+収入、ゼロ。
+
+<rd>想像するだけで、息が止まりそうだ。</rd>`
   },
   {
-    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🌊', progress: 62,
-    text: `彼が立ち上げたコミュニティ、\n<hi>RAML（Renton AI Movie Lab）</hi>。\n\n・週1回の定期ゼミ（画面共有で一緒に学ぶ）\n・月刊テーマで迷わず進める\n・無制限の質問・作品添削\n・1人にしない、仲間がいる\n\nあなたはその説明を読みながら思った。\n<em>「これが、自分が探していた環境だ」</em>`,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💪', progress:55,
+    text:`そこから、AIを使い始めた。
+
+最初は全然うまくいかなかった。
+画像は崩れる。動画は変になる。
+
+<em>「自分と同じだ」</em>と思った。
+
+でも彼は諦めなかった。
+試行錯誤して、試行錯誤して——
+気づいたら、それが仕事になっていた。`
   },
   {
-    type: 'scene', chapter: 'CHAPTER 4 ── 決断', icon: '💫', progress: 68,
-    text: `月額3,980円。\n\nコーヒー1杯分/日以下で、\n最新AIツールの使い方、仲間、フィードバック、\nすべてが手に入る。\n\nあなたはRAMLへの入会ボタンを押した。\n\n<hi>3ヶ月後の物語が、始まる。</hi>`,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💬', progress:60,
+    text:`彼のコメント欄を見た。
+
+「レントンさんのおかげで初めて動画が作れました」
+「1人だったら絶対続けられなかった」
+「質問に毎回答えてくれてありがとうございます」
+
+<hi>なんか、すごくあったかい場所だな。</hi>
+
+そう思った。`
   },
+  {
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'🌊', progress:65,
+    text:`<hi>RAML（Renton AI Movie Lab）</hi>
+
+・週1回、一緒に画面見ながら学ぶゼミ
+・月のテーマが決まってるから迷わない
+・いつでも質問できる、作品も見せ合える
+・「1人にしない」が、コンセプト
+
+レントンは言っていた。
+
+<em>「才能がなくていい。
+環境があれば、誰でも変われる。
+俺がそうだったから」</em>`
+  },
+  {
+    type:'scene', chapter:'CHAPTER 4 ── 決断', icon:'💫', progress:70,
+    text:`月額3,980円。
+
+高額なAI講座は、数十万円するものもある。
+個別契約のAIツールを複数使えば、
+それだけで月1〜2万円かかることもある。
+
+<em>3,980円で、これだけ揃っている。</em>
+
+「あのとき動いていたら、どうなっていたか」
+
+——もう、同じ後悔はしたくない。
+
+あなたは入会ボタンを押した。`
+  }
 ];
 
 const ENDING = {
-  sell: {
-    icon: '🛍',
-    scenes: [
+  sell:{
+    scenes:[
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📸', progress: 78,
-        text: `RAMLのゼミでAI画像生成を学んだあなたは、\n商品撮影にAIを組み合わせ始めた。\n\nプロが撮ったような商品写真が、\n<em>自分一人で作れるようになった</em>。`,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📸', progress:80,
+        text:`RAMLのゼミで、AI画像の使い方を覚えた。
+
+最初はぎこちなかった。
+でも、仲間のフィードバックを受けながら
+少しずつクオリティが上がっていった。
+
+<gr>商品写真に、AI画像を組み合わせた。</gr>
+
+「プロに頼んだの？」と聞かれた。
+自分で作ったと言ったら、驚かれた。`
       },
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎬', progress: 85,
-        text: `さらに、AI動画で商品のPR動画を制作。\n\n仲間のフィードバックを受けながら磨いた動画を\nSNSに投稿すると、今までと<hi>全然違う反応</hi>が返ってきた。\n\nインプレッションが10倍以上に。`,
-      },
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📊', progress:88,
+        text:`AI動画で、商品のPR動画を作った。
+
+SNSに投稿した。
+今まで「いいね」が10もつかなかった投稿が、
+<hi>3日で1万インプレッションを超えた。</hi>
+
+「商品、どこで買えますか？」
+そんなDMが届き始めた。
+
+<em>——あのとき動いて、よかった。</em>`
+      }
     ],
-    endIcon: '📈', endTitle: '売り上げが動き始めた', endSub: 'AI動画×商品訴求で、問い合わせが増えた。\n仲間と環境があったから、ここまで来られた。',
+    endIcon:'📈', endTitle:'売り上げが、動き出した。',
+    endSub:`AIで商品の「見せ方」が変わった。\n<strong>変わったのは技術じゃなくて、環境だった。</strong>`
   },
-  sns: {
-    icon: '📱',
-    scenes: [
+  sns:{
+    scenes:[
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '✨', progress: 78,
-        text: `AIで作った画像・動画をSNSに投稿し始めた。\n\nRAMLの月刊テーマに沿って\n毎月コンテンツを作り続けたことで、\n<em>アカウントに独自の世界観</em>が生まれた。`,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'✨', progress:80,
+        text:`RAMLの月刊テーマに沿って、コンテンツを作り続けた。
+
+「今月はこれを作る」が決まっているだけで、
+<gr>こんなに迷わなくなるとは思っていなかった。</gr>
+
+AI画像、AI動画。
+毎月少しずつ、自分のSNSに世界観が生まれていった。`
       },
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📊', progress: 85,
-        text: `フォロワーが増え、インプレッションが跳ねた。\n\nSNSプラットフォームの収益化条件をクリアし、\n<hi>初めて収益通知</hi>が届いた日のことは\nずっと忘れないだろう。`,
-      },
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🔔', progress:88,
+        text:`スマホに通知が来た。
+
+「収益化条件を達成しました」
+
+<hi>思わず、声が出た。</hi>
+
+フォロワーも、3ヶ月前の3倍になっていた。
+
+<em>1人だったら、絶対に続けられなかった。</em>
+仲間がいたから、ここまで来られた。`
+      }
     ],
-    endIcon: '🚀', endTitle: 'フォロワー増・収益化達成', endSub: '継続できたのは、仲間がいたから。\n1人だったら、きっと途中で止まっていた。',
+    endIcon:'🚀', endTitle:'収益化、達成。',
+    endSub:`フォロワーが増えたのは、技術じゃなくて継続のおかげ。\n<strong>継続できたのは、1人じゃなかったから。</strong>`
   },
-  client: {
-    icon: '💼',
-    scenes: [
+  client:{
+    scenes:[
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎨', progress: 78,
-        text: `RAMLでAI動画・画像生成スキルを磨いた。\n\n仲間の作品を見て、フィードバックをもらい、\n<em>自分の作品のクオリティが目に見えて上がっていった</em>。\n\nポートフォリオに載せられる作品が増えた。`,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🎨', progress:80,
+        text:`RAMLで、ひたすら作った。
+
+ゼミで学んで、仲間に見せて、フィードバックをもらう。
+それを繰り返しているうちに、
+<gr>ポートフォリオに載せられる作品が増えていった。</gr>
+
+「1人では絶対にここまで来られなかった」
+正直、そう思う。`
       },
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📧', progress: 85,
-        text: `ある日、メッセージが届いた。\n\n「AI動画の制作をお願いしたいのですが」\n\n<hi>初めての案件依頼</hi>だった。\nRAMLで積み上げた実績が、\n仕事につながった瞬間だった。`,
-      },
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📩', progress:88,
+        text:`ある日、メッセージが届いた。
+
+「AI動画の制作をお願いしたいのですが」
+
+<hi>——初めての案件依頼だった。</hi>
+
+3ヶ月前、実績ゼロで止まっていた自分が、
+今は仕事を受けている。
+
+<em>環境が、自分を変えた。</em>`
+      }
     ],
-    endIcon: '💰', endTitle: '初案件獲得', endSub: 'スキルと実績が揃えば、仕事は来る。\nRAMLが、その最短距離だった。',
+    endIcon:'💰', endTitle:'初案件、獲得。',
+    endSub:`スキルと実績が揃えば、仕事は来る。\n<strong>RAMLが、その最短距離だった。</strong>`
   },
-  explore: {
-    icon: '🌱',
-    scenes: [
+  explore:{
+    scenes:[
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎓', progress: 78,
-        text: `RAMLのゼミに参加し続けた。\n\n最初は何がしたいかわからなかったけど、\n仲間の作品を見たり、\n一緒に作ったりするうちに、\n<em>自分が面白いと思うものが見えてきた</em>。`,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🌱', progress:80,
+        text:`最初は何がしたいかわからなかった。
+
+でもRAMLのゼミに参加し続けるうちに、
+仲間の作品を見て、一緒に作ったりして——
+
+<gr>少しずつ、自分が面白いと感じるものが見えてきた。</gr>`
       },
       {
-        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '💡', progress: 85,
-        text: `「自分はSNS発信にAIを使いたい」\n\nそれが3ヶ月後のあなたの答えだった。\n\n<hi>やりたいことが見つかった</hi>だけじゃない。\nそれを実現するスキルも、仲間も、\nすでに手の中にあった。`,
-      },
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'💡', progress:88,
+        text:`「SNSの発信にAIを使っていきたい」
+
+それが、3ヶ月後の自分の答えだった。
+
+やりたいことが見つかっただけじゃない。
+<hi>それを実現するスキルも、仲間も、</hi>
+もう手の中にあった。
+
+<em>動き始めれば、答えは向こうからやってくる。</em>`
+      }
     ],
-    endIcon: '🌟', endTitle: 'やりたいことが、見つかった', endSub: '何がしたいかわからなくていい。\n動き始めれば、答えは向こうからやってくる。',
-  },
+    endIcon:'🌟', endTitle:'やりたいこと、見つかった。',
+    endSub:`何もわからなくて当然だった。\n<strong>環境に入ったら、自然と見えてきた。</strong>`
+  }
 };
 
-// ===== エンジン =====
-let currentBranch = null;
-let sceneQueue = [];
-let sceneIndex = 0;
-let isTyping = false;
-let currentFullText = '';
+// ============================================================
+// エンジン
+// ============================================================
+let branch = null;
+let queue = [];
+let qi = 0;
+let typing = false;
+let fullText = '';
+let afterDone = null;
 
 function startNovel() {
   document.getElementById('s-title').style.display = 'none';
   document.getElementById('s-novel').style.display = 'block';
-  buildQueue(COMMON_INTRO);
-  renderNext();
+  runQueue(COMMON_INTRO, null);
 }
 
-function buildQueue(scenes) {
-  sceneQueue = scenes;
-  sceneIndex = 0;
+function runQueue(scenes, callback) {
+  queue = scenes;
+  qi = 0;
+  afterDone = callback;
+  next();
 }
 
-function setProgress(pct) {
-  document.getElementById('progress-bar').style.width = pct + '%';
+function next() {
+  if (qi >= queue.length) { if (afterDone) afterDone(); return; }
+  const s = queue[qi];
+  setProgress(s.progress || 0);
+  if (s.type === 'scene')  renderScene(s);
+  else if (s.type === 'choice') renderChoice(s);
 }
 
-function renderNext() {
-  if (sceneIndex >= sceneQueue.length) return;
-  const scene = sceneQueue[sceneIndex];
-  setProgress(scene.progress || 0);
-
-  if (scene.type === 'scene') {
-    renderScene(scene);
-  } else if (scene.type === 'choice') {
-    renderChoice(scene);
-  } else if (scene.type === 'ending') {
-    renderEnding(scene);
-  }
+function setProgress(p) {
+  document.getElementById('progress-bar').style.width = p + '%';
+  const m = queue[qi]?.chapter?.match(/CHAPTER (\d+)/);
+  if (m) document.getElementById('chapter-label').textContent = 'Ch.' + m[1];
 }
 
-function renderScene(scene) {
-  const container = document.getElementById('scene-container');
-  container.innerHTML = `
-    <div class="scene-wrap" id="current-scene" onclick="onSceneTap()">
-      <div class="scene-icon">${scene.icon}</div>
-      <div class="scene-chapter">${scene.chapter}</div>
-      <div class="scene-text typewriter" id="scene-text"></div>
-      <div class="tap-hint" id="tap-hint" style="display:none;">タップして続ける ▼</div>
-    </div>
-  `;
-
-  // chapterラベル更新
-  const ch = scene.chapter.match(/CHAPTER (\d+)/);
-  if (ch) document.getElementById('chapter-label').textContent = `Ch.${ch[1]}`;
-
-  currentFullText = scene.text;
-  typeText(scene.text);
+function renderScene(s) {
+  const c = document.getElementById('scene-container');
+  c.innerHTML = `
+    <div class="scene-wrap" onclick="tapScene()">
+      <div class="scene-icon">${s.icon}</div>
+      <div class="scene-chapter">${s.chapter}</div>
+      <div class="scene-text typewriter-cursor" id="stext"></div>
+      <div class="tap-hint" id="taph" style="display:none">タップして続ける ▼</div>
+    </div>`;
+  fullText = s.text;
+  typeText(s.text);
 }
 
-function typeText(text) {
-  isTyping = true;
-  const el = document.getElementById('scene-text');
-  let i = 0;
-  let display = '';
+function typeText(raw) {
+  typing = true;
+  const el = document.getElementById('stext');
+  const encoded = raw
+    .replace(/<em>([\s\S]*?)<\/em>/g, '⟨e⟩$1⟨/e⟩')
+    .replace(/<hi>([\s\S]*?)<\/hi>/g, '⟨h⟩$1⟨/h⟩')
+    .replace(/<gr>([\s\S]*?)<\/gr>/g, '⟨g⟩$1⟨/g⟩')
+    .replace(/<rd>([\s\S]*?)<\/rd>/g, '⟨r⟩$1⟨/r⟩')
+    .replace(/<lg>([\s\S]*?)<\/lg>/g, '⟨l⟩$1⟨/l⟩');
+  const chars = [...encoded];
+  let buf = ''; let i = 0;
 
-  // HTMLタグ処理
-  const parsed = text.replace(/<em>(.*?)<\/em>/g, (_, t) => `⟨em⟩${t}⟨/em⟩`)
-                     .replace(/<hi>(.*?)<\/hi>/g, (_, t) => `⟨hi⟩${t}⟨/hi⟩`)
-                     .replace(/<gr>(.*?)<\/gr>/g, (_, t) => `⟨gr⟩${t}⟨/gr⟩`);
-  const chars = [...parsed];
+  const decode = t => t
+    .replace(/⟨e⟩([\s\S]*?)⟨\/e⟩/g,'<span class="em">$1</span>')
+    .replace(/⟨h⟩([\s\S]*?)⟨\/h⟩/g,'<span class="hi">$1</span>')
+    .replace(/⟨g⟩([\s\S]*?)⟨\/g⟩/g,'<span class="gr">$1</span>')
+    .replace(/⟨r⟩([\s\S]*?)⟨\/r⟩/g,'<span class="rd">$1</span>')
+    .replace(/⟨l⟩([\s\S]*?)⟨\/l⟩/g,'<span class="lg">$1</span>')
+    .replace(/\n/g,'<br>');
 
-  const timer = setInterval(() => {
+  const t = setInterval(() => {
     if (i >= chars.length) {
-      clearInterval(timer);
-      isTyping = false;
-      el.classList.remove('typewriter');
-      document.getElementById('tap-hint').style.display = 'block';
+      clearInterval(t);
+      typing = false;
+      el.classList.remove('typewriter-cursor');
+      document.getElementById('taph').style.display = 'block';
       return;
     }
-    display += chars[i];
-    i++;
-    el.innerHTML = display
-      .replace(/⟨em⟩(.*?)⟨\/em⟩/g, '<span class="em">$1</span>')
-      .replace(/⟨hi⟩(.*?)⟨\/hi⟩/g, '<span class="hi">$1</span>')
-      .replace(/⟨gr⟩(.*?)⟨\/gr⟩/g, '<span class="gr">$1</span>')
-      .replace(/\n/g, '<br>');
-  }, 28);
+    buf += chars[i++];
+    el.innerHTML = decode(buf);
+  }, 26);
 }
 
-function onSceneTap() {
-  if (isTyping) {
-    // 全部表示
-    isTyping = false;
-    const el = document.getElementById('scene-text');
-    el.classList.remove('typewriter');
-    el.innerHTML = currentFullText
-      .replace(/<em>(.*?)<\/em>/g, '<span class="em">$1</span>')
-      .replace(/<hi>(.*?)<\/hi>/g, '<span class="hi">$1</span>')
-      .replace(/<gr>(.*?)<\/gr>/g, '<span class="gr">$1</span>')
-      .replace(/\n/g, '<br>');
-    document.getElementById('tap-hint').style.display = 'block';
-    return;
-  }
-  // 次へ
-  sceneIndex++;
-  if (sceneIndex < sceneQueue.length) {
-    renderNext();
-  } else {
-    // キュー終了後の処理
-    afterQueue();
-  }
+function showFull() {
+  typing = false;
+  const el = document.getElementById('stext');
+  el.classList.remove('typewriter-cursor');
+  const decode = t => t
+    .replace(/<em>([\s\S]*?)<\/em>/g,'<span class="em">$1</span>')
+    .replace(/<hi>([\s\S]*?)<\/hi>/g,'<span class="hi">$1</span>')
+    .replace(/<gr>([\s\S]*?)<\/gr>/g,'<span class="gr">$1</span>')
+    .replace(/<rd>([\s\S]*?)<\/rd>/g,'<span class="rd">$1</span>')
+    .replace(/<lg>([\s\S]*?)<\/lg>/g,'<span class="lg">$1</span>')
+    .replace(/\n/g,'<br>');
+  el.innerHTML = decode(fullText);
+  document.getElementById('taph').style.display = 'block';
 }
 
-let afterQueueCallback = null;
-
-function afterQueue() {
-  if (afterQueueCallback) afterQueueCallback();
+function tapScene() {
+  if (typing) { showFull(); return; }
+  qi++;
+  next();
 }
 
-function renderChoice(scene) {
-  setProgress(scene.progress || 15);
-  const container = document.getElementById('scene-container');
-  container.innerHTML = `
-    <div class="choices-wrap" style="padding-top:40px;">
-      <div class="choices-title" style="font-size:18px;font-weight:800;color:#fff;margin-bottom:24px;line-height:1.4;">${scene.question}</div>
-      ${scene.choices.map(c => `
-        <button class="choice-btn" onclick="choicePicked('${c.key}')">
-          ${c.label}
-        </button>
-      `).join('')}
-    </div>
-  `;
+function renderChoice(s) {
+  setProgress(s.progress || 17);
+  document.getElementById('scene-container').innerHTML = `
+    <div class="choices-wrap">
+      <div class="choices-title">${s.question.replace(/\n/g,'<br>')}</div>
+      ${s.choices.map(c=>`<button class="choice-btn" onclick="pick('${c.key}')">${c.label}</button>`).join('')}
+    </div>`;
+  document.getElementById('chapter-label').textContent = 'Q';
 }
 
-function choicePicked(key) {
-  currentBranch = key;
-  const branchScenes = BRANCH[key] || [];
-  sceneQueue = [...branchScenes, ...COMMON_RENTON];
-  sceneIndex = 0;
-
-  afterQueueCallback = () => {
-    // レントン→共通が終わったらエンディングシーンへ
-    const ending = ENDING[currentBranch];
-    sceneQueue = [...ending.scenes];
-    sceneIndex = 0;
-    afterQueueCallback = () => showEnding(ending);
-    renderNext();
-  };
-
-  renderNext();
+function pick(key) {
+  branch = key;
+  const b = BRANCH[key] || [];
+  runQueue([...b, ...COMMON_RENTON], () => {
+    const e = ENDING[branch];
+    runQueue(e.scenes, () => showEnding(e));
+  });
 }
 
-function showEnding(ending) {
-  const container = document.getElementById('scene-container');
+function showEnding(e) {
   setProgress(100);
   document.getElementById('chapter-label').textContent = 'END';
-  container.innerHTML = `
+  document.getElementById('scene-container').innerHTML = `
     <div class="ending-wrap">
-      <div class="ending-icon">${ending.endIcon}</div>
-      <h2 class="ending-h2">${ending.endTitle}</h2>
-      <p class="ending-sub">${ending.endSub.replace(/\n/g,'<br>')}</p>
+      <div class="ending-icon">${e.endIcon}</div>
+      <h2 class="ending-h2">${e.endTitle}</h2>
+      <p class="ending-sub">${e.endSub.replace(/\n/g,'<br>')}</p>
       <div class="price-box">
         <div class="price-label">月額</div>
         <div><span class="price-num">3,980</span><span style="font-size:16px;color:var(--muted);margin-left:4px;">円</span></div>
-        <div class="price-note">週1ゼミ・無制限質問・月刊テーマ・仲間<br>全部込みで、コーヒー1杯分/日以下</div>
+        <div class="price-note">週1ゼミ・無制限質問・月刊テーマ・仲間<br>全部入りで、コーヒー1杯/日以下</div>
       </div>
       <a href="${RAML_URL}" class="btn-cta">🌊 RAMLの仲間になる</a>
       <div class="share-row">
@@ -544,22 +683,18 @@ function showEnding(ending) {
         <button class="btn-share" onclick="restart()">🔄 もう一度</button>
       </div>
       <p class="footer">Renton AI Movie Lab（RAML）<br>AIの波に、仲間と一緒に乗ろう。</p>
-    </div>
-  `;
+    </div>`;
 }
 
 function shareX() {
-  const text = encodeURIComponent('RAMLに出会ったら3ヶ月後どうなるか体験した🌊\nAI動画・画像生成を仲間と学べるコミュニティが気になってる！\n#RAML #AI動画 #AIスキル');
-  window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+  const t = encodeURIComponent('RAMLに出会ったら3ヶ月後どうなるか体験した🌊\nAI動画・画像生成を仲間と学べるコミュニティ！\n#RAML #AI動画 #AI副業');
+  window.open('https://twitter.com/intent/tweet?text='+t,'_blank');
 }
 
 function restart() {
-  currentBranch = null;
-  sceneQueue = [];
-  sceneIndex = 0;
-  afterQueueCallback = null;
-  document.getElementById('s-novel').style.display = 'none';
-  document.getElementById('s-title').style.display = 'flex';
+  branch=null; queue=[]; qi=0; typing=false; afterDone=null;
+  document.getElementById('s-novel').style.display='none';
+  document.getElementById('s-title').style.display='flex';
 }
 </script>
 </body>
