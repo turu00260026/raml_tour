@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AIの波診断｜Renton AI Movie Lab</title>
+  <title>あなたの3ヶ月後の物語｜RAML</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
+      --bg: #080614;
+      --surface: #120E24;
+      --surface2: #1C1635;
       --primary: #7C3AED;
-      --cyan: #06B6D4;
-      --gold: #F59E0B;
-      --bg: #0B0918;
-      --surface: #15112A;
-      --surface2: #1E1840;
+      --cyan: #22D3EE;
+      --gold: #FBBF24;
+      --green: #34D399;
       --text: #F0EEFF;
       --muted: #8B85A8;
     }
@@ -21,482 +22,545 @@
       min-height: 100vh;
       font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
       color: var(--text);
+      overflow-x: hidden;
     }
-    body::before {
+    body::after {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse at 15% 15%, rgba(124,58,237,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 85%, rgba(6,182,212,0.12) 0%, transparent 55%);
+        radial-gradient(ellipse at 10% 10%, rgba(124,58,237,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 90%, rgba(34,211,238,0.1) 0%, transparent 50%);
       pointer-events: none;
       z-index: 0;
     }
+
     #app {
       position: relative;
       z-index: 1;
-      max-width: 680px;
+      max-width: 640px;
       margin: 0 auto;
-      padding: 32px 20px 48px;
+      padding: 0 0 80px;
     }
 
-    /* ── スクリーン ── */
-    .screen { display: none; animation: fadeUp 0.4s ease; }
-    .screen.active { display: block; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* ======= タイトル ======= */
+    #s-title {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
     }
-
-    /* ── タイトル ── */
     .title-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.3));
+      gap: 6px;
       border: 1px solid rgba(124,58,237,0.5);
       border-radius: 99px;
-      padding: 6px 18px;
-      font-size: 12px;
+      padding: 5px 16px;
+      font-size: 11px;
       font-weight: bold;
       letter-spacing: 2px;
       color: var(--cyan);
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
+    .title-emoji { font-size: 80px; margin-bottom: 28px; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
     .title-h1 {
-      font-size: clamp(30px, 8vw, 52px);
+      font-size: clamp(28px, 8vw, 44px);
       font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 20%, var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .title-desc {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 40px;
-    }
-    .hero-visual {
-      margin: 0 auto 40px;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--cyan));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 56px;
-      box-shadow: 0 0 48px rgba(124,58,237,0.5);
-      animation: glow 2.5s ease-in-out infinite;
-    }
-    @keyframes glow {
-      0%,100% { box-shadow: 0 0 48px rgba(124,58,237,0.5); }
-      50%      { box-shadow: 0 0 72px rgba(6,182,212,0.7); }
-    }
-    .tags-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 40px;
-    }
-    .tag {
-      background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 99px;
-      padding: 6px 14px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* ── ボタン ── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 18px 24px;
+    .title-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 48px; }
+    .btn-start {
+      padding: 18px 48px;
+      background: linear-gradient(135deg, var(--primary), #9333EA);
+      color: #fff;
       font-size: 18px;
       font-weight: bold;
       border: none;
-      border-radius: 14px;
+      border-radius: 99px;
       cursor: pointer;
-      transition: transform 0.1s, opacity 0.1s;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
+      transition: transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #9333EA);
-      color: #fff;
-      box-shadow: 0 6px 28px rgba(124,58,237,0.4);
+    .btn-start:active { transform: scale(0.96); }
+
+    /* ======= ノベル画面 ======= */
+    #s-novel { display: none; min-height: 100vh; }
+
+    .novel-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(8,6,20,0.9);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .btn-cta {
-      background: linear-gradient(135deg, var(--gold), #F97316);
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-      box-shadow: 0 6px 32px rgba(245,158,11,0.45);
-    }
-    .btn-ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 14px;
-      padding: 12px 24px;
-      margin-top: 10px;
+    .chapter-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+    .chapter-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--cyan)); border-radius: 3px; transition: width 0.5s; }
+    .chapter-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+    .scene-wrap {
+      padding: 32px 24px 24px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ── 診断 ── */
-    .progress-wrap { display: flex; gap: 8px; margin-bottom: 32px; }
-    .pbar { flex: 1; height: 5px; border-radius: 5px; background: rgba(255,255,255,0.08); transition: background 0.4s; }
-    .pbar.done   { background: var(--primary); }
-    .pbar.active { background: var(--cyan); }
-    .q-label { font-size: 12px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 10px; }
-    .q-text  { font-size: clamp(18px, 5vw, 24px); font-weight: 800; line-height: 1.4; margin-bottom: 28px; }
-    .choices { display: flex; flex-direction: column; gap: 12px; }
-    .choice {
+    .scene-icon { font-size: 56px; text-align: center; margin-bottom: 24px; }
+    .scene-chapter {
+      font-size: 11px; font-weight: bold; letter-spacing: 2px;
+      color: var(--cyan); margin-bottom: 12px;
+    }
+    .scene-text {
+      font-size: 16px; line-height: 2; flex: 1;
+      white-space: pre-wrap;
+    }
+    .scene-text .em { color: var(--gold); font-weight: bold; }
+    .scene-text .hi { color: var(--cyan); font-weight: bold; }
+    .scene-text .gr { color: var(--green); font-weight: bold; }
+
+    /* タイプライター */
+    .typewriter::after {
+      content: '▊';
+      animation: blink 0.7s infinite;
+      color: var(--cyan);
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .tap-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 20px 0 0;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* 選択肢 */
+    .choices-wrap { padding: 0 24px 32px; }
+    .choices-title { font-size: 14px; color: var(--muted); margin-bottom: 16px; text-align: center; }
+    .choice-btn {
+      display: block; width: 100%;
       padding: 18px 20px;
       background: var(--surface);
-      border: 2px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
       color: var(--text);
-      font-size: 15px;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
+      font-size: 15px; font-weight: 600;
+      text-align: left; cursor: pointer;
+      margin-bottom: 12px;
       line-height: 1.5;
       transition: border-color 0.2s, background 0.2s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
-    .choice:active { transform: scale(0.98); }
-    .choice:hover { border-color: var(--primary); background: rgba(124,58,237,0.1); }
-    .choice.selected { border-color: var(--cyan); background: rgba(6,182,212,0.1); }
+    .choice-btn:active { transform: scale(0.98); }
+    .choice-btn:hover { border-color: var(--primary); background: rgba(124,58,237,0.1); }
 
-    /* ── カード ── */
-    .card {
-      background: var(--surface);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
+    /* エンディング */
+    .ending-wrap { padding: 24px; text-align: center; }
+    .ending-icon { font-size: 72px; margin-bottom: 20px; animation: float 2s ease-in-out infinite; }
+    .ending-h2 {
+      font-size: clamp(22px, 6vw, 32px); font-weight: 900;
+      line-height: 1.3; margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--gold), #F97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .card-label {
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-    .card-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-    .card-text  { font-size: 14px; color: var(--muted); line-height: 1.8; }
-
-    /* ── できること ── */
-    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-    @media (max-width: 420px) { .feature-grid { grid-template-columns: 1fr; } }
-    .feat-card {
-      background: var(--surface2);
-      border-radius: 16px;
-      padding: 20px 16px;
-      border: 1px solid rgba(124,58,237,0.2);
-    }
-    .feat-icon { font-size: 32px; margin-bottom: 10px; }
-    .feat-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
-    .feat-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-    /* ── ドラマ ── */
-    .drama-item {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .drama-line {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .drama-dot {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--cyan));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .drama-connector {
-      width: 2px;
-      flex: 1;
-      min-height: 24px;
-      background: linear-gradient(to bottom, var(--primary), transparent);
-      margin-top: 4px;
-    }
-    .drama-content { flex: 1; padding-bottom: 8px; }
-    .drama-scene { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 6px; }
-    .drama-text  { font-size: 15px; line-height: 1.8; }
-    .drama-text em { color: var(--gold); font-style: normal; font-weight: bold; }
-
-    /* ── 価格 ── */
+    .ending-sub { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
     .price-box {
-      text-align: center;
-      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.15));
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(34,211,238,0.15));
       border: 1px solid rgba(124,58,237,0.4);
       border-radius: 20px;
-      padding: 28px 24px;
-      margin-bottom: 20px;
+      padding: 24px; margin-bottom: 20px;
+      text-align: center;
     }
-    .price-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-    .price-num   { font-size: 48px; font-weight: 900; color: var(--gold); line-height: 1; }
-    .price-unit  { font-size: 16px; color: var(--muted); margin-left: 4px; }
-    .price-note  { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
-
+    .price-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .price-num { font-size: 44px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .price-note { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+    .btn-cta {
+      display: block; width: 100%;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, var(--gold), #F97316);
+      color: #fff; font-size: 20px; font-weight: 900;
+      border: none; border-radius: 14px; cursor: pointer;
+      box-shadow: 0 6px 32px rgba(245,158,11,0.4);
+      transition: transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none; text-align: center;
+    }
+    .btn-cta:active { transform: scale(0.97); }
     .share-row { display: flex; gap: 10px; margin-top: 10px; }
     .btn-share {
-      flex: 1;
-      padding: 12px;
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 13px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      flex: 1; padding: 12px;
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; color: var(--text); font-size: 13px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-    .footer-note {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 24px;
-      line-height: 1.8;
-    }
-    .section-title {
-      font-size: clamp(22px, 6vw, 32px);
-      font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 10px;
-    }
-    .section-sub {
-      font-size: 15px;
-      color: var(--muted);
-      margin-bottom: 28px;
-      line-height: 1.7;
-    }
-    .highlight { color: var(--cyan); }
-    .gold { color: var(--gold); }
+    .footer { font-size: 11px; color: var(--muted); text-align: center; margin-top: 20px; line-height: 1.8; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ① タイトル -->
-  <div id="s-title" class="screen active" style="text-align:center;">
-    <div class="title-badge">🌊 AI WAVE DIAGNOSIS</div>
-    <div class="hero-visual">🤖</div>
-    <h1 class="title-h1">あなたのAI活用<br>現在地診断</h1>
-    <p class="title-desc">画像・動画生成AI、SNS発信、副業…<br>あなたは今、どのステージにいますか？<br>3つの質問で診断します。</p>
-    <div class="tags-row">
-      <span class="tag">🖼 画像生成AI</span>
-      <span class="tag">🎬 動画生成AI</span>
-      <span class="tag">📱 SNS発信</span>
-      <span class="tag">💰 副業</span>
-    </div>
-    <button class="btn btn-primary" onclick="go('s-q1')">診断スタート →</button>
+  <!-- タイトル -->
+  <div id="s-title">
+    <div class="title-badge">🌊 RAML STORY</div>
+    <div class="title-emoji">🎬</div>
+    <h1 class="title-h1">あなたの<br>3ヶ月後の物語</h1>
+    <p class="title-desc">AI動画・画像生成に興味があるあなた。<br>もしRAMLに出会ったら、<br>3ヶ月後はどうなっているだろう？</p>
+    <button class="btn-start" onclick="startNovel()">物語をはじめる →</button>
   </div>
 
-  <!-- ② Q1 -->
-  <div id="s-q1" class="screen">
-    <div class="progress-wrap">
-      <div class="pbar active"></div><div class="pbar"></div><div class="pbar"></div>
+  <!-- ノベル -->
+  <div id="s-novel">
+    <div class="novel-header">
+      <div class="chapter-bar"><div class="chapter-fill" id="progress-bar" style="width:0%"></div></div>
+      <div class="chapter-label" id="chapter-label">Ch.1</div>
     </div>
-    <div class="q-label">Q 1 / 3</div>
-    <h2 class="q-text">AIに興味を持ったのは<br>どんなきっかけですか？</h2>
-    <div class="choices">
-      <button class="choice" onclick="pick(1,this)">🖼 画像生成AIを見て、自分でも作ってみたいと思った</button>
-      <button class="choice" onclick="pick(1,this)">🎬 AI動画が面白くて、自分の発信に使いたい</button>
-      <button class="choice" onclick="pick(1,this)">💰 AIで副業できると聞いて気になっている</button>
-      <button class="choice" onclick="pick(1,this)">😰 AIに乗り遅れると感じて焦っている</button>
-    </div>
-  </div>
-
-  <!-- ③ Q2 -->
-  <div id="s-q2" class="screen">
-    <div class="progress-wrap">
-      <div class="pbar done"></div><div class="pbar active"></div><div class="pbar"></div>
-    </div>
-    <div class="q-label">Q 2 / 3</div>
-    <h2 class="q-text">今のあなたの状況は<br>どれに近いですか？</h2>
-    <div class="choices">
-      <button class="choice" onclick="pick(2,this)">🤔 興味はあるけど、何から始めればいいか全くわからない</button>
-      <button class="choice" onclick="pick(2,this)">😓 ツールを触ってみたが思い通りにならず止まっている</button>
-      <button class="choice" onclick="pick(2,this)">📱 発信はしているが、AIをうまく活用できていない</button>
-      <button class="choice" onclick="pick(2,this)">🔥 すでに動いているが、もっとクオリティを上げたい</button>
-    </div>
-  </div>
-
-  <!-- ④ Q3 -->
-  <div id="s-q3" class="screen">
-    <div class="progress-wrap">
-      <div class="pbar done"></div><div class="pbar done"></div><div class="pbar active"></div>
-    </div>
-    <div class="q-label">Q 3 / 3</div>
-    <h2 class="q-text">AIスキルで<br>一番実現したいことは？</h2>
-    <div class="choices">
-      <button class="choice" onclick="pick(3,this)">📈 SNSのフォロワーを増やして影響力をつけたい</button>
-      <button class="choice" onclick="pick(3,this)">💸 副業・案件獲得で収入を増やしたい</button>
-      <button class="choice" onclick="pick(3,this)">🚀 仕事やビジネスにAIを活かして差をつけたい</button>
-      <button class="choice" onclick="pick(3,this)">✨ 自分のイメージを映像・画像にして表現したい</button>
-    </div>
-  </div>
-
-  <!-- ⑤ RAMLでできること -->
-  <div id="s-features" class="screen">
-    <h2 class="section-title">RAMLに入ったら<br><span class="highlight">これができる</span></h2>
-    <p class="section-sub">診断結果：あなたにはAIを学べる環境と仲間が必要です。</p>
-
-    <div class="feature-grid">
-      <div class="feat-card">
-        <div class="feat-icon">🖼</div>
-        <div class="feat-title">画像生成AI<br>マスター</div>
-        <div class="feat-desc">自分のイメージ通りの画像を作れるプロンプト術を習得</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🎬</div>
-        <div class="feat-title">AI動画<br>クリエイター</div>
-        <div class="feat-desc">本格的なCM風動画を、AIで個人が低コストで制作できる</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📱</div>
-        <div class="feat-title">SNS発信力<br>アップ</div>
-        <div class="feat-desc">AI生成コンテンツでSNSを強化し、フォロワーと影響力を獲得</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">💰</div>
-        <div class="feat-title">副業・案件<br>獲得へ</div>
-        <div class="feat-desc">身につけたAIスキルを仕事に活かして収入の柱を増やす</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-label" style="color:var(--cyan);">📅 RAMLの学び方</div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <span style="font-size:20px;">🎓</span>
-          <div><strong>週1回の定期ゼミ</strong><br><span style="font-size:13px;color:var(--muted);">画面共有しながら最新AIツールを一緒に学ぶ</span></div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <span style="font-size:20px;">🎯</span>
-          <div><strong>月刊テーマで迷わない</strong><br><span style="font-size:13px;color:var(--muted);">「今月はこれを作る」が決まってるから迷わず進める</span></div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <span style="font-size:20px;">💬</span>
-          <div><strong>無制限の質問・添削</strong><br><span style="font-size:13px;color:var(--muted);">Discordでいつでも質問・作品フィードバックを受けられる</span></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" onclick="go('s-renton')">レントンの話を聞く →</button>
-  </div>
-
-  <!-- ⑥ れんとんの軌跡 -->
-  <div id="s-renton" class="screen">
-    <h2 class="section-title">RAMLオーナー<br><span class="highlight">レントンの軌跡</span></h2>
-    <p class="section-sub">なぜ彼は、このコミュニティを作ったのか。</p>
-
-    <div class="drama-item">
-      <div class="drama-line">
-        <div class="drama-dot">😔</div>
-        <div class="drama-connector"></div>
-      </div>
-      <div class="drama-content">
-        <div class="drama-scene">2023 ── 突然の絶望</div>
-        <p class="drama-text">理学療法士として働いていたレントン。<br>ある日、勤め先が<em>突然廃業</em>。<br>妊娠中の妻、4人の子供、そして収入ゼロ。<br>人生で最大の危機だった。</p>
-      </div>
-    </div>
-
-    <div class="drama-item">
-      <div class="drama-line">
-        <div class="drama-dot">💡</div>
-        <div class="drama-connector"></div>
-      </div>
-      <div class="drama-content">
-        <div class="drama-scene">転機 ── AIとの出会い</div>
-        <p class="drama-text">追い詰められた中で出会ったのが<em>AI</em>だった。<br>最初は失敗の連続。画像は崩れ、思い通りにならない。<br>それでも諦めず、試行錯誤を重ねた。</p>
-      </div>
-    </div>
-
-    <div class="drama-item">
-      <div class="drama-line">
-        <div class="drama-dot">🚀</div>
-        <div class="drama-connector"></div>
-      </div>
-      <div class="drama-content">
-        <div class="drama-scene">復活 ── AIスキルが武器になる</div>
-        <p class="drama-text">身につけた<em>AI動画・画像生成スキル</em>が、<br>講師業、動画制作案件、そして今のビジネスへとつながった。<br>「AIは魔法じゃない。でも、<em>使いこなせれば人生が変わる</em>。」</p>
-      </div>
-    </div>
-
-    <div class="drama-item">
-      <div class="drama-line">
-        <div class="drama-dot">🌊</div>
-      </div>
-      <div class="drama-content">
-        <div class="drama-scene">現在 ── RAMLを立ち上げた理由</div>
-        <p class="drama-text">「<em>1人で挫折させたくない。</em>」<br>才能があるのに、環境がなくて諦めていく人たちを見てきた。<br>だから、仲間が集まれる場所を作った。<br>それがRAMLだ。</p>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" onclick="go('s-join')">あなたも波に乗る →</button>
-  </div>
-
-  <!-- ⑦ 仲間になろう -->
-  <div id="s-join" class="screen" style="text-align:center;">
-    <div style="font-size:56px;margin-bottom:16px;animation:glow 2s infinite;">🌊</div>
-    <h2 class="section-title"><span class="gold">一緒に、波に乗ろう。</span></h2>
-    <p class="section-sub">AIという大きな波が来ている。<br>1人で挑まなくていい。<br>RAMLには、同じ志を持つ仲間がいる。</p>
-
-    <div class="price-box">
-      <div class="price-label">月額</div>
-      <div><span class="price-num">3,980</span><span class="price-unit">円</span></div>
-      <div class="price-note">週1ゼミ・無制限質問・月刊テーマ・プロンプト共有<br>全部込みで、コーヒー1杯分/日以下</div>
-    </div>
-
-    <a href="#" class="btn btn-cta" id="cta-btn">🌊 RAMLの仲間になる</a>
-
-    <div class="share-row">
-      <button class="btn-share" onclick="shareX()">𝕏 シェア</button>
-      <button class="btn-share" onclick="go('s-title');resetAll()">🔄 もう一度</button>
-    </div>
-
-    <p class="footer-note">Renton AI Movie Lab（RAML）<br>AIの波に、仲間と一緒に乗ろう。</p>
+    <div id="scene-container"></div>
   </div>
 
 </div>
+
 <script>
-  const RAML_URL = '#'; // ← 入会URLをここに入れる
+const RAML_URL = '#'; // ← 入会URLをここに
 
-  document.getElementById('cta-btn').href = RAML_URL;
+// ===== シナリオ定義 =====
+// type: 'scene' | 'choice' | 'ending'
 
-  function go(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+const COMMON_INTRO = [
+  {
+    type: 'scene',
+    chapter: 'CHAPTER 1 ── 始まりの悩み',
+    icon: '😔',
+    progress: 5,
+    text: `あなたはAI画像生成・動画生成が\n気になって仕方がない。\n\nSNSに流れてくるAI動画の\nクオリティに驚き、\n「自分でも作れたら…」と思う日々。\n\nでも、<em>何から始めればいいのか</em>、全くわからない。`,
+  },
+  {
+    type: 'scene',
+    chapter: 'CHAPTER 1 ── 始まりの悩み',
+    icon: '🌊',
+    progress: 10,
+    text: `「AIを使える人が、\n使えない人の仕事を奪う」\n\nそんな言葉がずっと頭に引っかかっている。\n\n<hi>ガラケーからスマホへの転換期</hi>と同じように、\n今まさに時代が変わろうとしていた。`,
+  },
+  {
+    type: 'choice',
+    progress: 15,
+    question: 'あなたが一番やりたいことは？',
+    choices: [
+      { label: '🛍 自分の商品・サービスをもっと売りたい', key: 'sell' },
+      { label: '📱 SNSで収益化・フォロワーを増やしたい', key: 'sns' },
+      { label: '💼 動画・画像のクライアントワークで稼ぎたい', key: 'client' },
+      { label: '🤔 何がしたいかわからないけど、AIに可能性を感じる', key: 'explore' },
+    ],
+  },
+];
+
+const BRANCH = {
+  sell: [
+    {
+      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '🛍', progress: 22,
+      text: `あなたには売りたい商品がある。\n\nでも、SNSの反応は薄い。\n写真は自分で撮っているけど、\n<em>どこかプロっぽさが足りない。</em>\n\n「もし動画やAI画像で商品を魅せられたら…」\nそんなことをずっと考えていた。`,
+    },
+  ],
+  sns: [
+    {
+      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '📱', progress: 22,
+      text: `発信はしているが、フォロワーが伸びない。\n\n毎日投稿しても<em>反応がなく</em>、\n正直なところ、モチベーションが下がっていた。\n\n「AI動画やAI画像で差別化できたら」\nそう思いつつも、何も動けていなかった。`,
+    },
+  ],
+  client: [
+    {
+      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '💼', progress: 22,
+      text: `動画編集や画像制作を仕事にしたい。\n\nでも今の自分には<em>実績もスキルも足りない</em>。\n独学で試したけど、プロンプトが思い通りにならず\nすぐ止まってしまう。\n\nクライアントの前に出せる作品がなかった。`,
+    },
+  ],
+  explore: [
+    {
+      type: 'scene', chapter: 'CHAPTER 2 ── あなたの今', icon: '🤔', progress: 22,
+      text: `AIに可能性は感じる。\n\nでも何に使えばいいのか、\n自分が<em>何をしたいのか</em>もまだわからない。\n\n「とりあえず触ってみようか」\nそう思っても、情報が多すぎて\nどこから手をつければいいか迷っていた。`,
+    },
+  ],
+};
+
+const COMMON_RENTON = [
+  {
+    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '📲', progress: 40,
+    text: `ある日、SNSのタイムラインに\n<hi>一本の動画投稿</hi>が流れてきた。\n\n「AIで個人が本格的なCM動画を\n作れる時代が来ました」\n\nその動画のクオリティに\nあなたは思わず手を止めた。`,
+  },
+  {
+    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🎬', progress: 48,
+    text: `投稿者は<em>レントン</em>。\n\n理学療法士として働いていたが、\nある日突然、勤め先が廃業。\n妊娠中の妻と4人の子供を抱え、\n収入がゼロになった。\n\nその絶望の中で出会ったのが<hi>AI</hi>だった。`,
+  },
+  {
+    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🔥', progress: 55,
+    text: `失敗の連続だった。\n画像は崩れ、思い通りにならない。\n\nそれでも諦めず試行錯誤した結果、\nAI動画・画像生成スキルが武器になり、\n講師業、案件獲得、そして今のビジネスへ。\n\n「<em>環境と仲間があれば、誰でもできる</em>」\nレントンはそう言っていた。`,
+  },
+  {
+    type: 'scene', chapter: 'CHAPTER 3 ── 出会い', icon: '🌊', progress: 62,
+    text: `彼が立ち上げたコミュニティ、\n<hi>RAML（Renton AI Movie Lab）</hi>。\n\n・週1回の定期ゼミ（画面共有で一緒に学ぶ）\n・月刊テーマで迷わず進める\n・無制限の質問・作品添削\n・1人にしない、仲間がいる\n\nあなたはその説明を読みながら思った。\n<em>「これが、自分が探していた環境だ」</em>`,
+  },
+  {
+    type: 'scene', chapter: 'CHAPTER 4 ── 決断', icon: '💫', progress: 68,
+    text: `月額3,980円。\n\nコーヒー1杯分/日以下で、\n最新AIツールの使い方、仲間、フィードバック、\nすべてが手に入る。\n\nあなたはRAMLへの入会ボタンを押した。\n\n<hi>3ヶ月後の物語が、始まる。</hi>`,
+  },
+];
+
+const ENDING = {
+  sell: {
+    icon: '🛍',
+    scenes: [
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📸', progress: 78,
+        text: `RAMLのゼミでAI画像生成を学んだあなたは、\n商品撮影にAIを組み合わせ始めた。\n\nプロが撮ったような商品写真が、\n<em>自分一人で作れるようになった</em>。`,
+      },
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎬', progress: 85,
+        text: `さらに、AI動画で商品のPR動画を制作。\n\n仲間のフィードバックを受けながら磨いた動画を\nSNSに投稿すると、今までと<hi>全然違う反応</hi>が返ってきた。\n\nインプレッションが10倍以上に。`,
+      },
+    ],
+    endIcon: '📈', endTitle: '売り上げが動き始めた', endSub: 'AI動画×商品訴求で、問い合わせが増えた。\n仲間と環境があったから、ここまで来られた。',
+  },
+  sns: {
+    icon: '📱',
+    scenes: [
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '✨', progress: 78,
+        text: `AIで作った画像・動画をSNSに投稿し始めた。\n\nRAMLの月刊テーマに沿って\n毎月コンテンツを作り続けたことで、\n<em>アカウントに独自の世界観</em>が生まれた。`,
+      },
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📊', progress: 85,
+        text: `フォロワーが増え、インプレッションが跳ねた。\n\nSNSプラットフォームの収益化条件をクリアし、\n<hi>初めて収益通知</hi>が届いた日のことは\nずっと忘れないだろう。`,
+      },
+    ],
+    endIcon: '🚀', endTitle: 'フォロワー増・収益化達成', endSub: '継続できたのは、仲間がいたから。\n1人だったら、きっと途中で止まっていた。',
+  },
+  client: {
+    icon: '💼',
+    scenes: [
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎨', progress: 78,
+        text: `RAMLでAI動画・画像生成スキルを磨いた。\n\n仲間の作品を見て、フィードバックをもらい、\n<em>自分の作品のクオリティが目に見えて上がっていった</em>。\n\nポートフォリオに載せられる作品が増えた。`,
+      },
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '📧', progress: 85,
+        text: `ある日、メッセージが届いた。\n\n「AI動画の制作をお願いしたいのですが」\n\n<hi>初めての案件依頼</hi>だった。\nRAMLで積み上げた実績が、\n仕事につながった瞬間だった。`,
+      },
+    ],
+    endIcon: '💰', endTitle: '初案件獲得', endSub: 'スキルと実績が揃えば、仕事は来る。\nRAMLが、その最短距離だった。',
+  },
+  explore: {
+    icon: '🌱',
+    scenes: [
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '🎓', progress: 78,
+        text: `RAMLのゼミに参加し続けた。\n\n最初は何がしたいかわからなかったけど、\n仲間の作品を見たり、\n一緒に作ったりするうちに、\n<em>自分が面白いと思うものが見えてきた</em>。`,
+      },
+      {
+        type: 'scene', chapter: 'CHAPTER 5 ── 3ヶ月後', icon: '💡', progress: 85,
+        text: `「自分はSNS発信にAIを使いたい」\n\nそれが3ヶ月後のあなたの答えだった。\n\n<hi>やりたいことが見つかった</hi>だけじゃない。\nそれを実現するスキルも、仲間も、\nすでに手の中にあった。`,
+      },
+    ],
+    endIcon: '🌟', endTitle: 'やりたいことが、見つかった', endSub: '何がしたいかわからなくていい。\n動き始めれば、答えは向こうからやってくる。',
+  },
+};
+
+// ===== エンジン =====
+let currentBranch = null;
+let sceneQueue = [];
+let sceneIndex = 0;
+let isTyping = false;
+let currentFullText = '';
+
+function startNovel() {
+  document.getElementById('s-title').style.display = 'none';
+  document.getElementById('s-novel').style.display = 'block';
+  buildQueue(COMMON_INTRO);
+  renderNext();
+}
+
+function buildQueue(scenes) {
+  sceneQueue = scenes;
+  sceneIndex = 0;
+}
+
+function setProgress(pct) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function renderNext() {
+  if (sceneIndex >= sceneQueue.length) return;
+  const scene = sceneQueue[sceneIndex];
+  setProgress(scene.progress || 0);
+
+  if (scene.type === 'scene') {
+    renderScene(scene);
+  } else if (scene.type === 'choice') {
+    renderChoice(scene);
+  } else if (scene.type === 'ending') {
+    renderEnding(scene);
   }
+}
 
-  function pick(q, btn) {
-    btn.classList.add('selected');
-    const next = { 1: 's-q2', 2: 's-q3', 3: 's-features' };
-    setTimeout(() => go(next[q]), 320);
-  }
+function renderScene(scene) {
+  const container = document.getElementById('scene-container');
+  container.innerHTML = `
+    <div class="scene-wrap" id="current-scene" onclick="onSceneTap()">
+      <div class="scene-icon">${scene.icon}</div>
+      <div class="scene-chapter">${scene.chapter}</div>
+      <div class="scene-text typewriter" id="scene-text"></div>
+      <div class="tap-hint" id="tap-hint" style="display:none;">タップして続ける ▼</div>
+    </div>
+  `;
 
-  function resetAll() {
-    document.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-  }
+  // chapterラベル更新
+  const ch = scene.chapter.match(/CHAPTER (\d+)/);
+  if (ch) document.getElementById('chapter-label').textContent = `Ch.${ch[1]}`;
 
-  function shareX() {
-    const text = encodeURIComponent('AIの波に乗れるか？診断してみた🌊\nRAML（Renton AI Movie Lab）が気になってる！\n#RAML #AI動画 #AI副業');
-    window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+  currentFullText = scene.text;
+  typeText(scene.text);
+}
+
+function typeText(text) {
+  isTyping = true;
+  const el = document.getElementById('scene-text');
+  let i = 0;
+  let display = '';
+
+  // HTMLタグ処理
+  const parsed = text.replace(/<em>(.*?)<\/em>/g, (_, t) => `⟨em⟩${t}⟨/em⟩`)
+                     .replace(/<hi>(.*?)<\/hi>/g, (_, t) => `⟨hi⟩${t}⟨/hi⟩`)
+                     .replace(/<gr>(.*?)<\/gr>/g, (_, t) => `⟨gr⟩${t}⟨/gr⟩`);
+  const chars = [...parsed];
+
+  const timer = setInterval(() => {
+    if (i >= chars.length) {
+      clearInterval(timer);
+      isTyping = false;
+      el.classList.remove('typewriter');
+      document.getElementById('tap-hint').style.display = 'block';
+      return;
+    }
+    display += chars[i];
+    i++;
+    el.innerHTML = display
+      .replace(/⟨em⟩(.*?)⟨\/em⟩/g, '<span class="em">$1</span>')
+      .replace(/⟨hi⟩(.*?)⟨\/hi⟩/g, '<span class="hi">$1</span>')
+      .replace(/⟨gr⟩(.*?)⟨\/gr⟩/g, '<span class="gr">$1</span>')
+      .replace(/\n/g, '<br>');
+  }, 28);
+}
+
+function onSceneTap() {
+  if (isTyping) {
+    // 全部表示
+    isTyping = false;
+    const el = document.getElementById('scene-text');
+    el.classList.remove('typewriter');
+    el.innerHTML = currentFullText
+      .replace(/<em>(.*?)<\/em>/g, '<span class="em">$1</span>')
+      .replace(/<hi>(.*?)<\/hi>/g, '<span class="hi">$1</span>')
+      .replace(/<gr>(.*?)<\/gr>/g, '<span class="gr">$1</span>')
+      .replace(/\n/g, '<br>');
+    document.getElementById('tap-hint').style.display = 'block';
+    return;
   }
+  // 次へ
+  sceneIndex++;
+  if (sceneIndex < sceneQueue.length) {
+    renderNext();
+  } else {
+    // キュー終了後の処理
+    afterQueue();
+  }
+}
+
+let afterQueueCallback = null;
+
+function afterQueue() {
+  if (afterQueueCallback) afterQueueCallback();
+}
+
+function renderChoice(scene) {
+  setProgress(scene.progress || 15);
+  const container = document.getElementById('scene-container');
+  container.innerHTML = `
+    <div class="choices-wrap" style="padding-top:40px;">
+      <div class="choices-title" style="font-size:18px;font-weight:800;color:#fff;margin-bottom:24px;line-height:1.4;">${scene.question}</div>
+      ${scene.choices.map(c => `
+        <button class="choice-btn" onclick="choicePicked('${c.key}')">
+          ${c.label}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function choicePicked(key) {
+  currentBranch = key;
+  const branchScenes = BRANCH[key] || [];
+  sceneQueue = [...branchScenes, ...COMMON_RENTON];
+  sceneIndex = 0;
+
+  afterQueueCallback = () => {
+    // レントン→共通が終わったらエンディングシーンへ
+    const ending = ENDING[currentBranch];
+    sceneQueue = [...ending.scenes];
+    sceneIndex = 0;
+    afterQueueCallback = () => showEnding(ending);
+    renderNext();
+  };
+
+  renderNext();
+}
+
+function showEnding(ending) {
+  const container = document.getElementById('scene-container');
+  setProgress(100);
+  document.getElementById('chapter-label').textContent = 'END';
+  container.innerHTML = `
+    <div class="ending-wrap">
+      <div class="ending-icon">${ending.endIcon}</div>
+      <h2 class="ending-h2">${ending.endTitle}</h2>
+      <p class="ending-sub">${ending.endSub.replace(/\n/g,'<br>')}</p>
+      <div class="price-box">
+        <div class="price-label">月額</div>
+        <div><span class="price-num">3,980</span><span style="font-size:16px;color:var(--muted);margin-left:4px;">円</span></div>
+        <div class="price-note">週1ゼミ・無制限質問・月刊テーマ・仲間<br>全部込みで、コーヒー1杯分/日以下</div>
+      </div>
+      <a href="${RAML_URL}" class="btn-cta">🌊 RAMLの仲間になる</a>
+      <div class="share-row">
+        <button class="btn-share" onclick="shareX()">𝕏 シェア</button>
+        <button class="btn-share" onclick="restart()">🔄 もう一度</button>
+      </div>
+      <p class="footer">Renton AI Movie Lab（RAML）<br>AIの波に、仲間と一緒に乗ろう。</p>
+    </div>
+  `;
+}
+
+function shareX() {
+  const text = encodeURIComponent('RAMLに出会ったら3ヶ月後どうなるか体験した🌊\nAI動画・画像生成を仲間と学べるコミュニティが気になってる！\n#RAML #AI動画 #AIスキル');
+  window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+}
+
+function restart() {
+  currentBranch = null;
+  sceneQueue = [];
+  sceneIndex = 0;
+  afterQueueCallback = null;
+  document.getElementById('s-novel').style.display = 'none';
+  document.getElementById('s-title').style.display = 'flex';
+}
 </script>
 </body>
 </html>
