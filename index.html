@@ -3,574 +3,499 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AIの波に乗れるか？｜RAML 未来診断</title>
+  <title>AIの波診断｜Renton AI Movie Lab</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       --primary: #7C3AED;
-      --secondary: #06B6D4;
-      --accent: #F59E0B;
-      --bg: #0F0A1E;
-      --surface: #1A1035;
-      --text: #F1F0FF;
-      --muted: #9CA3AF;
+      --cyan: #06B6D4;
+      --gold: #F59E0B;
+      --bg: #0B0918;
+      --surface: #15112A;
+      --surface2: #1E1840;
+      --text: #F0EEFF;
+      --muted: #8B85A8;
     }
-
-    body {
+    html, body {
       background: var(--bg);
       min-height: 100vh;
       font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
       color: var(--text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
     }
-
-    /* 背景アニメーション */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.15) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.1) 0%, transparent 60%);
+        radial-gradient(ellipse at 15% 15%, rgba(124,58,237,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(6,182,212,0.12) 0%, transparent 55%);
       pointer-events: none;
       z-index: 0;
     }
-
     #app {
       position: relative;
       z-index: 1;
-      width: 100%;
       max-width: 680px;
-      padding: 24px 20px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
     }
 
-    /* === スクリーン === */
-    .screen { display: none; }
+    /* ── スクリーン ── */
+    .screen { display: none; animation: fadeUp 0.4s ease; }
     .screen.active { display: block; }
-
-    /* === タイトル画面 === */
-    #screen-title {
-      text-align: center;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .wave-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
+    /* ── タイトル ── */
+    .title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.3));
+      border: 1px solid rgba(124,58,237,0.5);
+      border-radius: 99px;
+      padding: 6px 18px;
       font-size: 12px;
       font-weight: bold;
       letter-spacing: 2px;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 24px;
+      color: var(--cyan);
+      margin-bottom: 28px;
     }
-
-    .title-main {
-      font-size: clamp(28px, 7vw, 48px);
+    .title-h1 {
+      font-size: clamp(30px, 8vw, 52px);
       font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
-    .title-sub {
-      font-size: clamp(15px, 3.5vw, 20px);
+    .title-desc {
+      font-size: 16px;
       color: var(--muted);
+      line-height: 1.8;
       margin-bottom: 40px;
-      line-height: 1.7;
     }
-
-    .ai-visual {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 32px;
-      position: relative;
-    }
-
-    .ai-circle {
-      width: 140px;
-      height: 140px;
+    .hero-visual {
+      margin: 0 auto 40px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 64px;
-      animation: pulse 2s infinite;
-      box-shadow: 0 0 40px rgba(124,58,237,0.4);
+      font-size: 56px;
+      box-shadow: 0 0 48px rgba(124,58,237,0.5);
+      animation: glow 2.5s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 48px rgba(124,58,237,0.5); }
+      50%      { box-shadow: 0 0 72px rgba(6,182,212,0.7); }
+    }
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .tag {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 40px rgba(124,58,237,0.4); transform: scale(1); }
-      50% { box-shadow: 0 0 60px rgba(6,182,212,0.6); transform: scale(1.03); }
-    }
-
-    .story-box {
-      background: var(--surface);
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 32px;
-      text-align: left;
-    }
-
-    .story-box .label {
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--secondary);
-      margin-bottom: 10px;
-    }
-
-    .story-box p {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--text);
-    }
-
-    .story-box strong {
-      color: var(--accent);
-    }
-
-    /* === ボタン === */
-    .btn-primary {
+    /* ── ボタン ── */
+    .btn {
       display: block;
       width: 100%;
       padding: 18px 24px;
-      background: linear-gradient(135deg, var(--primary), #9333EA);
-      color: white;
       font-size: 18px;
       font-weight: bold;
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
-      box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+      transition: transform 0.1s, opacity 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .btn-primary:active { transform: scale(0.97); }
-
-    .btn-secondary {
-      display: block;
-      width: 100%;
-      padding: 14px 24px;
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #9333EA);
+      color: #fff;
+      box-shadow: 0 6px 28px rgba(124,58,237,0.4);
+    }
+    .btn-cta {
+      background: linear-gradient(135deg, var(--gold), #F97316);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      box-shadow: 0 6px 32px rgba(245,158,11,0.45);
+    }
+    .btn-ghost {
       background: transparent;
       color: var(--muted);
-      font-size: 14px;
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      cursor: pointer;
-      margin-top: 12px;
-      transition: background 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      font-size: 14px;
+      padding: 12px 24px;
+      margin-top: 10px;
     }
 
-    .btn-secondary:hover { background: rgba(255,255,255,0.05); }
-
-    /* === 診断画面 === */
-    .progress-bar {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 32px;
-    }
-
-    .progress-dot {
-      flex: 1;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.1);
-      transition: background 0.4s;
-    }
-
-    .progress-dot.done { background: var(--primary); }
-    .progress-dot.active { background: var(--secondary); }
-
-    .question-label {
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--secondary);
-      margin-bottom: 12px;
-    }
-
-    .question-text {
-      font-size: clamp(18px, 5vw, 24px);
-      font-weight: 800;
-      line-height: 1.4;
-      margin-bottom: 32px;
-    }
-
-    .choices {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .choice-btn {
-      width: 100%;
+    /* ── 診断 ── */
+    .progress-wrap { display: flex; gap: 8px; margin-bottom: 32px; }
+    .pbar { flex: 1; height: 5px; border-radius: 5px; background: rgba(255,255,255,0.08); transition: background 0.4s; }
+    .pbar.done   { background: var(--primary); }
+    .pbar.active { background: var(--cyan); }
+    .q-label { font-size: 12px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 10px; }
+    .q-text  { font-size: clamp(18px, 5vw, 24px); font-weight: 800; line-height: 1.4; margin-bottom: 28px; }
+    .choices { display: flex; flex-direction: column; gap: 12px; }
+    .choice {
       padding: 18px 20px;
       background: var(--surface);
-      border: 2px solid rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.07);
       border-radius: 14px;
       color: var(--text);
       font-size: 15px;
       font-weight: 600;
       text-align: left;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.1s;
       line-height: 1.5;
+      transition: border-color 0.2s, background 0.2s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
+    .choice:active { transform: scale(0.98); }
+    .choice:hover { border-color: var(--primary); background: rgba(124,58,237,0.1); }
+    .choice.selected { border-color: var(--cyan); background: rgba(6,182,212,0.1); }
 
-    .choice-btn:hover {
-      border-color: var(--primary);
-      background: rgba(124,58,237,0.1);
-    }
-
-    .choice-btn:active { transform: scale(0.98); }
-
-    .choice-btn.selected {
-      border-color: var(--secondary);
-      background: rgba(6,182,212,0.12);
-    }
-
-    /* === ドラマパート === */
-    .drama-box {
+    /* ── カード ── */
+    .card {
       background: var(--surface);
       border-radius: 20px;
-      padding: 28px 24px;
-      margin-bottom: 24px;
-      border-left: 4px solid var(--primary);
-      animation: fadeIn 0.5s;
+      padding: 24px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .drama-scene {
-      font-size: 13px;
+    .card-label {
+      font-size: 11px;
       font-weight: bold;
       letter-spacing: 2px;
-      color: var(--primary);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
+    .card-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+    .card-text  { font-size: 14px; color: var(--muted); line-height: 1.8; }
 
-    .drama-text {
-      font-size: 16px;
-      line-height: 1.9;
-      color: var(--text);
-    }
-
-    .drama-text em {
-      color: var(--accent);
-      font-style: normal;
-      font-weight: bold;
-    }
-
-    /* === 結果画面 === */
-    #screen-result { text-align: center; }
-
-    .result-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-      animation: bounce 0.6s;
-    }
-
-    @keyframes bounce {
-      0% { transform: scale(0); }
-      60% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
-
-    .result-title {
-      font-size: clamp(22px, 6vw, 32px);
-      font-weight: 900;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--accent), #F97316);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .result-subtitle {
-      font-size: 15px;
-      color: var(--muted);
-      margin-bottom: 32px;
-    }
-
-    .feature-list {
-      text-align: left;
-      background: var(--surface);
+    /* ── できること ── */
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 420px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feat-card {
+      background: var(--surface2);
       border-radius: 16px;
-      padding: 24px;
+      padding: 20px 16px;
+      border: 1px solid rgba(124,58,237,0.2);
+    }
+    .feat-icon { font-size: 32px; margin-bottom: 10px; }
+    .feat-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+    .feat-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ── ドラマ ── */
+    .drama-item {
+      display: flex;
+      gap: 16px;
       margin-bottom: 24px;
     }
-
-    .feature-item {
+    .drama-line {
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 14px;
-      line-height: 1.6;
+      flex-direction: column;
+      align-items: center;
     }
+    .drama-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .drama-connector {
+      width: 2px;
+      flex: 1;
+      min-height: 24px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+      margin-top: 4px;
+    }
+    .drama-content { flex: 1; padding-bottom: 8px; }
+    .drama-scene { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 6px; }
+    .drama-text  { font-size: 15px; line-height: 1.8; }
+    .drama-text em { color: var(--gold); font-style: normal; font-weight: bold; }
 
-    .feature-item:last-child { border-bottom: none; }
-
-    .feature-icon { font-size: 20px; flex-shrink: 0; }
-
+    /* ── 価格 ── */
     .price-box {
-      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
+      text-align: center;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.15));
       border: 1px solid rgba(124,58,237,0.4);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 28px;
-      text-align: center;
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
     }
-
     .price-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-    .price-amount {
-      font-size: 42px;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .price-unit { font-size: 16px; color: var(--muted); margin-left: 4px; }
+    .price-num   { font-size: 48px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .price-unit  { font-size: 16px; color: var(--muted); margin-left: 4px; }
+    .price-note  { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
 
-    .btn-cta {
-      display: block;
-      width: 100%;
-      padding: 20px 24px;
-      background: linear-gradient(135deg, var(--accent), #F97316);
-      color: white;
-      font-size: 20px;
-      font-weight: 900;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 6px 28px rgba(245,158,11,0.4);
-      -webkit-tap-highlight-color: transparent;
-      text-decoration: none;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .btn-cta:active { transform: scale(0.97); }
-
-    .share-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
+    .share-row { display: flex; gap: 10px; margin-top: 10px; }
     .btn-share {
       flex: 1;
       padding: 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       color: var(--text);
       font-size: 13px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
-
     .footer-note {
+      text-align: center;
       font-size: 12px;
       color: var(--muted);
-      text-align: center;
-      margin-top: 20px;
+      margin-top: 24px;
+      line-height: 1.8;
+    }
+    .section-title {
+      font-size: clamp(22px, 6vw, 32px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 28px;
       line-height: 1.7;
     }
+    .highlight { color: var(--cyan); }
+    .gold { color: var(--gold); }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- タイトル画面 -->
-  <div id="screen-title" class="screen active">
-    <div class="wave-badge">🌊 AI WAVE DIAGNOSIS</div>
-    <div class="ai-visual">
-      <div class="ai-circle">🤖</div>
+  <!-- ① タイトル -->
+  <div id="s-title" class="screen active" style="text-align:center;">
+    <div class="title-badge">🌊 AI WAVE DIAGNOSIS</div>
+    <div class="hero-visual">🤖</div>
+    <h1 class="title-h1">あなたのAI活用<br>現在地診断</h1>
+    <p class="title-desc">画像・動画生成AI、SNS発信、副業…<br>あなたは今、どのステージにいますか？<br>3つの質問で診断します。</p>
+    <div class="tags-row">
+      <span class="tag">🖼 画像生成AI</span>
+      <span class="tag">🎬 動画生成AI</span>
+      <span class="tag">📱 SNS発信</span>
+      <span class="tag">💰 副業</span>
     </div>
-    <h1 class="title-main">あなたはAIの波に<br>乗れているか？</h1>
-    <p class="title-sub">3つの質問に答えるだけで<br>あなたのAI活用の現在地と未来がわかる</p>
-
-    <div class="story-box">
-      <div class="label">📖 STORY</div>
-      <p>理学療法士として働いていたレトンは、ある日突然<strong>廃業という絶望</strong>を経験した。<br><br>4人の子供と妊娠中の妻を抱え、収入ゼロ。<br>そこで彼を救ったのが<strong>「AI」</strong>だった。</p>
-    </div>
-
-    <button class="btn-primary" onclick="startDiagnosis()">診断スタート →</button>
+    <button class="btn btn-primary" onclick="go('s-q1')">診断スタート →</button>
   </div>
 
-  <!-- Q1 -->
-  <div id="screen-q1" class="screen">
-    <div class="progress-bar">
-      <div class="progress-dot active" id="dot1"></div>
-      <div class="progress-dot" id="dot2"></div>
-      <div class="progress-dot" id="dot3"></div>
+  <!-- ② Q1 -->
+  <div id="s-q1" class="screen">
+    <div class="progress-wrap">
+      <div class="pbar active"></div><div class="pbar"></div><div class="pbar"></div>
     </div>
-    <div class="question-label">Q1 / 3</div>
-    <h2 class="question-text">あなたの今の状況は<br>どれに近いですか？</h2>
+    <div class="q-label">Q 1 / 3</div>
+    <h2 class="q-text">AIに興味を持ったのは<br>どんなきっかけですか？</h2>
     <div class="choices">
-      <button class="choice-btn" onclick="answer(1, 'beginner')">🤔 AIに興味はあるけど、何から始めればいいか全然わからない</button>
-      <button class="choice-btn" onclick="answer(1, 'stuck')">😓 ツールをいくつか試したが、思い通りにならず止まっている</button>
-      <button class="choice-btn" onclick="answer(1, 'active')">📱 発信はしているが、AIをうまく活用できていない</button>
-      <button class="choice-btn" onclick="answer(1, 'sidejob')">💰 副業を探していて、AI動画が気になっている</button>
+      <button class="choice" onclick="pick(1,this)">🖼 画像生成AIを見て、自分でも作ってみたいと思った</button>
+      <button class="choice" onclick="pick(1,this)">🎬 AI動画が面白くて、自分の発信に使いたい</button>
+      <button class="choice" onclick="pick(1,this)">💰 AIで副業できると聞いて気になっている</button>
+      <button class="choice" onclick="pick(1,this)">😰 AIに乗り遅れると感じて焦っている</button>
     </div>
   </div>
 
-  <!-- Q2 -->
-  <div id="screen-q2" class="screen">
-    <div class="progress-bar">
-      <div class="progress-dot done"></div>
-      <div class="progress-dot active"></div>
-      <div class="progress-dot"></div>
+  <!-- ③ Q2 -->
+  <div id="s-q2" class="screen">
+    <div class="progress-wrap">
+      <div class="pbar done"></div><div class="pbar active"></div><div class="pbar"></div>
     </div>
-    <div class="question-label">Q2 / 3</div>
-    <h2 class="question-text">AI学習を始めるとしたら<br>一番の不安は？</h2>
+    <div class="q-label">Q 2 / 3</div>
+    <h2 class="q-text">今のあなたの状況は<br>どれに近いですか？</h2>
     <div class="choices">
-      <button class="choice-btn" onclick="answer(2, 'info')">🌊 情報が多すぎて迷子になりそう</button>
-      <button class="choice-btn" onclick="answer(2, 'prompt')">🔧 プロンプトが難しそうで挫折しそう</button>
-      <button class="choice-btn" onclick="answer(2, 'alone')">😰 1人で続けられる自信がない</button>
-      <button class="choice-btn" onclick="answer(2, 'what')">❓ 何を作ったらいいかわからない</button>
+      <button class="choice" onclick="pick(2,this)">🤔 興味はあるけど、何から始めればいいか全くわからない</button>
+      <button class="choice" onclick="pick(2,this)">😓 ツールを触ってみたが思い通りにならず止まっている</button>
+      <button class="choice" onclick="pick(2,this)">📱 発信はしているが、AIをうまく活用できていない</button>
+      <button class="choice" onclick="pick(2,this)">🔥 すでに動いているが、もっとクオリティを上げたい</button>
     </div>
   </div>
 
-  <!-- Q3 -->
-  <div id="screen-q3" class="screen">
-    <div class="progress-bar">
-      <div class="progress-dot done"></div>
-      <div class="progress-dot done"></div>
-      <div class="progress-dot active"></div>
+  <!-- ④ Q3 -->
+  <div id="s-q3" class="screen">
+    <div class="progress-wrap">
+      <div class="pbar done"></div><div class="pbar done"></div><div class="pbar active"></div>
     </div>
-    <div class="question-label">Q3 / 3</div>
-    <h2 class="question-text">AIスキルが身についたら<br>まず何をしたいですか？</h2>
+    <div class="q-label">Q 3 / 3</div>
+    <h2 class="q-text">AIスキルで<br>一番実現したいことは？</h2>
     <div class="choices">
-      <button class="choice-btn" onclick="answer(3, 'sns')">📈 SNSのフォロワーを伸ばして発信力をつけたい</button>
-      <button class="choice-btn" onclick="answer(3, 'money')">💸 副業で月収を増やしたい</button>
-      <button class="choice-btn" onclick="answer(3, 'biz')">🚀 仕事やビジネスに活かして差をつけたい</button>
-      <button class="choice-btn" onclick="answer(3, 'enjoy')">✨ とにかくAI動画を作って楽しみたい</button>
+      <button class="choice" onclick="pick(3,this)">📈 SNSのフォロワーを増やして影響力をつけたい</button>
+      <button class="choice" onclick="pick(3,this)">💸 副業・案件獲得で収入を増やしたい</button>
+      <button class="choice" onclick="pick(3,this)">🚀 仕事やビジネスにAIを活かして差をつけたい</button>
+      <button class="choice" onclick="pick(3,this)">✨ 自分のイメージを映像・画像にして表現したい</button>
     </div>
   </div>
 
-  <!-- ドラマパート -->
-  <div id="screen-drama" class="screen">
-    <div class="drama-box">
-      <div class="drama-scene">🎬 SCENE 1 ── 孤独な挑戦</div>
-      <p class="drama-text">あなたは「よし、AIをやってみよう」と動き始めた。<br><br>しかし、情報は溢れ返っている。<br>プロンプトは思い通りにいかない。<br><em>誰にも聞けない</em>まま、少しずつ熱が冷めていく。</p>
+  <!-- ⑤ RAMLでできること -->
+  <div id="s-features" class="screen">
+    <h2 class="section-title">RAMLに入ったら<br><span class="highlight">これができる</span></h2>
+    <p class="section-sub">診断結果：あなたにはAIを学べる環境と仲間が必要です。</p>
+
+    <div class="feature-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🖼</div>
+        <div class="feat-title">画像生成AI<br>マスター</div>
+        <div class="feat-desc">自分のイメージ通りの画像を作れるプロンプト術を習得</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎬</div>
+        <div class="feat-title">AI動画<br>クリエイター</div>
+        <div class="feat-desc">本格的なCM風動画を、AIで個人が低コストで制作できる</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📱</div>
+        <div class="feat-title">SNS発信力<br>アップ</div>
+        <div class="feat-desc">AI生成コンテンツでSNSを強化し、フォロワーと影響力を獲得</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title">副業・案件<br>獲得へ</div>
+        <div class="feat-desc">身につけたAIスキルを仕事に活かして収入の柱を増やす</div>
+      </div>
     </div>
-    <div class="drama-box" style="border-left-color: var(--secondary); animation-delay: 0.2s;">
-      <div class="drama-scene" style="color: var(--secondary);">🌊 SCENE 2 ── 転換点</div>
-      <p class="drama-text">「AIを使える人が、使えない人の仕事を奪う」<br><br>これは脅しではなく、<em>現実</em>だ。<br>ガラケーからスマホへの転換期と同じ。<br>今がその<em>波の入り口</em>だ。</p>
+
+    <div class="card">
+      <div class="card-label" style="color:var(--cyan);">📅 RAMLの学び方</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">🎓</span>
+          <div><strong>週1回の定期ゼミ</strong><br><span style="font-size:13px;color:var(--muted);">画面共有しながら最新AIツールを一緒に学ぶ</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">🎯</span>
+          <div><strong>月刊テーマで迷わない</strong><br><span style="font-size:13px;color:var(--muted);">「今月はこれを作る」が決まってるから迷わず進める</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">💬</span>
+          <div><strong>無制限の質問・添削</strong><br><span style="font-size:13px;color:var(--muted);">Discordでいつでも質問・作品フィードバックを受けられる</span></div>
+        </div>
+      </div>
     </div>
-    <button class="btn-primary" onclick="showResult()">あなたの診断結果を見る →</button>
+
+    <button class="btn btn-primary" onclick="go('s-renton')">レントンの話を聞く →</button>
   </div>
 
-  <!-- 結果画面 -->
-  <div id="screen-result" class="screen">
-    <div class="result-icon">🎯</div>
-    <h2 class="result-title">あなたに必要なのは<br>「環境」だ</h2>
-    <p class="result-subtitle">才能や時間ではない。<br>正しい環境があれば、誰でもAIクリエイターになれる。</p>
+  <!-- ⑥ れんとんの軌跡 -->
+  <div id="s-renton" class="screen">
+    <h2 class="section-title">RAMLオーナー<br><span class="highlight">レントンの軌跡</span></h2>
+    <p class="section-sub">なぜ彼は、このコミュニティを作ったのか。</p>
 
-    <div class="feature-list">
-      <div class="feature-item">
-        <span class="feature-icon">📺</span>
-        <span><strong>週1回の定期ゼミ</strong><br>画面共有しながら最新ツールを一緒に学ぶ</span>
+    <div class="drama-item">
+      <div class="drama-line">
+        <div class="drama-dot">😔</div>
+        <div class="drama-connector"></div>
       </div>
-      <div class="feature-item">
-        <span class="feature-icon">🎯</span>
-        <span><strong>月刊テーマで迷わない</strong><br>「今月はこれを作る」が決まってるから進める</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">💬</span>
-        <span><strong>無制限の質問・添削</strong><br>Discordでいつでも相談できる仲間がいる</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">🚀</span>
-        <span><strong>作って終わりにしない</strong><br>SNS発信・副業・仕事への実戦まで導く</span>
+      <div class="drama-content">
+        <div class="drama-scene">2023 ── 突然の絶望</div>
+        <p class="drama-text">理学療法士として働いていたレントン。<br>ある日、勤め先が<em>突然廃業</em>。<br>妊娠中の妻、4人の子供、そして収入ゼロ。<br>人生で最大の危機だった。</p>
       </div>
     </div>
+
+    <div class="drama-item">
+      <div class="drama-line">
+        <div class="drama-dot">💡</div>
+        <div class="drama-connector"></div>
+      </div>
+      <div class="drama-content">
+        <div class="drama-scene">転機 ── AIとの出会い</div>
+        <p class="drama-text">追い詰められた中で出会ったのが<em>AI</em>だった。<br>最初は失敗の連続。画像は崩れ、思い通りにならない。<br>それでも諦めず、試行錯誤を重ねた。</p>
+      </div>
+    </div>
+
+    <div class="drama-item">
+      <div class="drama-line">
+        <div class="drama-dot">🚀</div>
+        <div class="drama-connector"></div>
+      </div>
+      <div class="drama-content">
+        <div class="drama-scene">復活 ── AIスキルが武器になる</div>
+        <p class="drama-text">身につけた<em>AI動画・画像生成スキル</em>が、<br>講師業、動画制作案件、そして今のビジネスへとつながった。<br>「AIは魔法じゃない。でも、<em>使いこなせれば人生が変わる</em>。」</p>
+      </div>
+    </div>
+
+    <div class="drama-item">
+      <div class="drama-line">
+        <div class="drama-dot">🌊</div>
+      </div>
+      <div class="drama-content">
+        <div class="drama-scene">現在 ── RAMLを立ち上げた理由</div>
+        <p class="drama-text">「<em>1人で挫折させたくない。</em>」<br>才能があるのに、環境がなくて諦めていく人たちを見てきた。<br>だから、仲間が集まれる場所を作った。<br>それがRAMLだ。</p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="go('s-join')">あなたも波に乗る →</button>
+  </div>
+
+  <!-- ⑦ 仲間になろう -->
+  <div id="s-join" class="screen" style="text-align:center;">
+    <div style="font-size:56px;margin-bottom:16px;animation:glow 2s infinite;">🌊</div>
+    <h2 class="section-title"><span class="gold">一緒に、波に乗ろう。</span></h2>
+    <p class="section-sub">AIという大きな波が来ている。<br>1人で挑まなくていい。<br>RAMLには、同じ志を持つ仲間がいる。</p>
 
     <div class="price-box">
       <div class="price-label">月額</div>
-      <div><span class="price-amount">3,980</span><span class="price-unit">円</span></div>
-      <div style="font-size:13px; color:var(--muted); margin-top:8px;">高額講座や個別契約のツール費用より<br>はるかに少ない投資で始められる</div>
+      <div><span class="price-num">3,980</span><span class="price-unit">円</span></div>
+      <div class="price-note">週1ゼミ・無制限質問・月刊テーマ・プロンプト共有<br>全部込みで、コーヒー1杯分/日以下</div>
     </div>
 
-    <a href="#" class="btn-cta" id="cta-btn" onclick="openRAML()">🌊 RAMLで波に乗る</a>
+    <a href="#" class="btn btn-cta" id="cta-btn">🌊 RAMLの仲間になる</a>
 
     <div class="share-row">
       <button class="btn-share" onclick="shareX()">𝕏 シェア</button>
-      <button class="btn-share" onclick="retryDiagnosis()">🔄 もう一度</button>
+      <button class="btn-share" onclick="go('s-title');resetAll()">🔄 もう一度</button>
     </div>
 
     <p class="footer-note">Renton AI Movie Lab（RAML）<br>AIの波に、仲間と一緒に乗ろう。</p>
   </div>
 
 </div>
-
 <script>
-  const RAML_URL = '#'; // 入会ページURLをここに入れる
+  const RAML_URL = '#'; // ← 入会URLをここに入れる
 
-  let answers = {};
+  document.getElementById('cta-btn').href = RAML_URL;
 
-  function showScreen(id) {
+  function go(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function startDiagnosis() {
-    showScreen('screen-q1');
-  }
-
-  function answer(q, val) {
-    answers[`q${q}`] = val;
-
-    const btn = event.target;
+  function pick(q, btn) {
     btn.classList.add('selected');
-
-    setTimeout(() => {
-      if (q === 1) showScreen('screen-q2');
-      else if (q === 2) showScreen('screen-q3');
-      else showScreen('screen-drama');
-    }, 300);
+    const next = { 1: 's-q2', 2: 's-q3', 3: 's-features' };
+    setTimeout(() => go(next[q]), 320);
   }
 
-  function showResult() {
-    showScreen('screen-result');
-  }
-
-  function retryDiagnosis() {
-    answers = {};
-    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
-    showScreen('screen-title');
-  }
-
-  function openRAML() {
-    if (RAML_URL !== '#') {
-      window.open(RAML_URL, '_blank');
-    }
+  function resetAll() {
+    document.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
   }
 
   function shareX() {
-    const text = encodeURIComponent('AIの波に乗れるか？診断してみた🌊\n\nAIスキルを仲間と一緒に磨けるコミュニティ「RAML」が気になってる！\n\n#RAML #AI動画 #AIスキル');
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+    const text = encodeURIComponent('AIの波に乗れるか？診断してみた🌊\nRAML（Renton AI Movie Lab）が気になってる！\n#RAML #AI動画 #AI副業');
+    window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
   }
 </script>
 </body>
