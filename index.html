@@ -76,7 +76,9 @@
       display: flex; flex-direction: column; cursor: pointer;
     }
     .scene-icon { text-align: center; margin-bottom: 24px; }
-    .scene-icon img { width: 120px; height: 120px; object-fit: contain; }
+    .scene-icon img { width: 140px; height: 140px; }
+    .scene-icon img.icon-crop { object-fit: cover; object-position: top center; }
+    .scene-icon img.icon-full { object-fit: contain; }
     .scene-chapter { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 16px; }
     .scene-text { font-size: 17px; line-height: 2.1; flex: 1; }
     .scene-text .em  { color: var(--gold); font-weight: bold; }
@@ -682,7 +684,8 @@ function setProgress(p) {
 
 function renderIcon(icon) {
   if (icon && (icon.endsWith('.png') || icon.endsWith('.jpg'))) {
-    return `<img src="${icon}" alt="">`;
+    const cls = icon.includes('hyoushi') ? 'icon-full' : 'icon-crop';
+    return `<img src="${icon}" alt="" class="${cls}">`;
   }
   return icon;
 }
