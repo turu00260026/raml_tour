@@ -75,7 +75,8 @@
       padding: 36px 24px 24px; min-height: calc(100vh - 60px);
       display: flex; flex-direction: column; cursor: pointer;
     }
-    .scene-icon { font-size: 52px; text-align: center; margin-bottom: 24px; }
+    .scene-icon { text-align: center; margin-bottom: 24px; }
+    .scene-icon img { width: 120px; height: 120px; object-fit: contain; }
     .scene-chapter { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: var(--cyan); margin-bottom: 16px; }
     .scene-text { font-size: 17px; line-height: 2.1; flex: 1; }
     .scene-text .em  { color: var(--gold); font-weight: bold; }
@@ -149,7 +150,7 @@
   <!-- タイトル -->
   <div id="s-title">
     <div class="title-eyebrow">🌊 RAML STORY</div>
-    <div class="title-emoji">🎬</div>
+    <div class="title-emoji"><img src="img/hyoushi.png" style="width:160px;height:160px;object-fit:contain;"></div>
     <h1 class="title-h1">AI画像・動画<br>楽しくまなぼう！</h1>
     <p class="title-hook">
       <strong>RAMLに入ったら何が起きるか、ネタバレします。</strong><br>
@@ -178,7 +179,7 @@ const RAML_URL = '#'; // ← 入会URLをここに
 
 const COMMON_INTRO = [
   {
-    type:'scene', chapter:'CHAPTER 1', icon:'📱', progress:5,
+    type:'scene', chapter:'CHAPTER 1', icon:'img/1.png', progress:5,
     text:`また今日も、眺めるだけで終わった。
 
 スクロールするたびに流れてくる、AIで作った動画たち。
@@ -191,7 +192,7 @@ const COMMON_INTRO = [
 <rd>——どこから始めればいいんだろう。</rd>`
   },
   {
-    type:'scene', chapter:'CHAPTER 1', icon:'😩', progress:10,
+    type:'scene', chapter:'CHAPTER 1', icon:'img/2.png', progress:10,
     text:`1人で調べてみた。
 
 ツールの種類が多すぎる。何が正解かわからない。
@@ -204,7 +205,7 @@ YouTubeで「AI動画、超簡単です！」って言ってたのに——
 （3回目）`
   },
   {
-    type:'scene', chapter:'CHAPTER 1', icon:'⏰', progress:14,
+    type:'scene', chapter:'CHAPTER 1', icon:'img/1.png', progress:14,
     text:`「AIを使える人が、使えない人の仕事を奪う」
 
 そんな怖いこと言わんといてくれ。
@@ -231,7 +232,7 @@ YouTubeで「AI動画、超簡単です！」って言ってたのに——
 const BRANCH = {
   sell:[
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'🛍', progress:22,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/1.png', progress:22,
       text:`商品はある。
 思い入れもある。
 でも、売れてない。
@@ -244,7 +245,7 @@ SNSに投稿しても反応が薄い。
 そう考えながら、また何もできない1日が終わる。`
     },
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'😔', progress:26,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/2.png', progress:26,
       text:`隣の人のSNSは伸びてる。
 
 同じような商品なのに、なんで。
@@ -261,7 +262,7 @@ AIで作ったきれいな画像、映える動画。
   ],
   sns:[
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'📱', progress:22,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/1.png', progress:22,
       text:`毎日投稿してる。
 なのに、フォロワーが増えない。
 
@@ -274,7 +275,7 @@ AIを使えば差別化できるかも——
 （なにもしてない）`
     },
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'😩', progress:26,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/2.png', progress:26,
       text:`収益化の条件、まだ遠い。
 
 フォロワー数、インプレッション、
@@ -289,7 +290,7 @@ AIを使えば差別化できるかも——
   ],
   client:[
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'💼', progress:22,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/1.png', progress:22,
       text:`AI動画・画像の制作を仕事にしたい。
 
 でも今の自分には、<rd>見せられる実績がない。</rd>
@@ -301,7 +302,7 @@ AIを使えば差別化できるかも——
 3日で止まった。`
     },
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'😔', progress:26,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/2.png', progress:26,
       text:`スキルがなければ案件は来ない。
 案件がなければ実績が積めない。
 
@@ -316,7 +317,7 @@ AIを使えば差別化できるかも——
   ],
   explore:[
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'🤔', progress:22,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/1.png', progress:22,
       text:`AI、なんか面白そう。
 でも何に使えばいいのかわからない。
 
@@ -327,7 +328,7 @@ AIを使えば差別化できるかも——
 情報多すぎて、<rd>どれが自分に合うのか全然わからない。</rd>`
     },
     {
-      type:'scene', chapter:'CHAPTER 2', icon:'😩', progress:26,
+      type:'scene', chapter:'CHAPTER 2', icon:'img/2.png', progress:26,
       text:`結局、何も始められないまま時間が過ぎる。
 
 「もっと情報集めてから動こう」
@@ -344,7 +345,7 @@ AIを使えば差別化できるかも——
 
 const RENTON_BEFORE = [
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'📲', progress:38,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/5.png', progress:38,
     text:`そんな日に、
 SNSに1本の動画が流れてきた。
 
@@ -356,7 +357,7 @@ SNSに1本の動画が流れてきた。
 （さっきまでリール5周してたくせに）`
   },
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'👤', progress:44,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/5.png', progress:44,
     text:`投稿者のプロフィールを見た。
 
 <hi>レントン</hi>。
@@ -368,7 +369,7 @@ SNSに1本の動画が流れてきた。
 かと思ってプロフィール読み進めたら——`
   },
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💥', progress:50,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/3.png', progress:50,
     text:`理学療法士として働いてたのに、
 ある日突然、勤め先が廃業。
 
@@ -381,7 +382,7 @@ SNSに1本の動画が流れてきた。
 重すぎる。背景重すぎる。`
   },
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💪', progress:55,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/4.png', progress:55,
     text:`そこから、AIを使い始めたらしい。
 
 最初は全然うまくいかなかったと。
@@ -398,7 +399,7 @@ SNSに1本の動画が流れてきた。
 
 const COMMENT_SCENES = {
   sell: {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💬', progress:60,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/6.png', progress:60,
     text:`コメント欄を見た。
 
 「商品写真、自分で撮ってて"素人感"あったんですが、AI画像と合わせたら"プロに頼んだの？"って聞かれました笑」
@@ -411,7 +412,7 @@ const COMMENT_SCENES = {
 なんかこっちまで、ほっとした。`
   },
   sns: {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💬', progress:60,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/6.png', progress:60,
     text:`コメント欄を見た。
 
 「毎日投稿してたのに全然伸びなかったのに、RAMLで月テーマ沿って動画作ったら3ヶ月でフォロワー3倍になりました」
@@ -424,7 +425,7 @@ const COMMENT_SCENES = {
 なんかこっちまで、ほっとした。`
   },
   client: {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💬', progress:60,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/6.png', progress:60,
     text:`コメント欄を見た。
 
 「実績ゼロだったのに先月初案件が来ました。RAMLのゼミで作った作品がそのままポートフォリオになった」
@@ -437,7 +438,7 @@ const COMMENT_SCENES = {
 なんかこっちまで、ほっとした。`
   },
   explore: {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'💬', progress:60,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/6.png', progress:60,
     text:`コメント欄を見た。
 
 「正直何がしたいかわからないまま入会した笑。でも今はSNS発信にAI使って毎日楽しい」
@@ -453,7 +454,7 @@ const COMMENT_SCENES = {
 
 const RENTON_AFTER = [
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'🌊', progress:63,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/6.png', progress:63,
     text:`<hi>RAML（Renton AI Movie Lab）</hi>
 
 大切にするのは、<em>「作る」「出す」「改善する」</em>この流れだけ。
@@ -477,7 +478,7 @@ const RENTON_AFTER = [
 ちょっと待て、このひと良い人すぎん？`
   },
   {
-    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'🚀', progress:67,
+    type:'scene', chapter:'CHAPTER 3 ── 出会い', icon:'img/5.png', progress:67,
     text:`入会したらまず何するの？って思うよね。
 
 それも用意されてた。
@@ -492,7 +493,7 @@ const RENTON_AFTER = [
 ちょっと、ずるくない？（いい意味で）`
   },
   {
-    type:'scene', chapter:'CHAPTER 4 ── 決断', icon:'💫', progress:70,
+    type:'scene', chapter:'CHAPTER 4 ── 決断', icon:'img/7.png', progress:70,
     text:`月額3,980円。
 
 この金額で何が変わるか——
@@ -519,7 +520,7 @@ const ENDING = {
   sell:{
     scenes:[
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📸', progress:80,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/7.png', progress:80,
         text:`RAMLのゼミで、AI画像の使い方を覚えた。
 
 最初はぎこちなかった。
@@ -531,7 +532,7 @@ const ENDING = {
 なんてことも、夢じゃない。`
       },
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📊', progress:88,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/hyoushi.png', progress:88,
         text:`AI動画で商品のPR動画を作って投稿したら、
 今まで「いいね」10もつかなかった投稿が
 <hi>3日で1万インプレッション……</hi>
@@ -550,7 +551,7 @@ DMが届く未来も、あるかもしれない。
   sns:{
     scenes:[
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'✨', progress:80,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/7.png', progress:80,
         text:`RAMLの月刊テーマに沿ってコンテンツを作り続けた。
 
 「今月はこれを作る」が決まってるだけで、
@@ -562,7 +563,7 @@ AI画像、AI動画。
 かもしれない。`
       },
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🔔', progress:88,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/hyoushi.png', progress:88,
         text:`スマホに通知が来る。
 
 「<hi>収益化条件を達成しました</hi>」
@@ -582,7 +583,7 @@ AI画像、AI動画。
   client:{
     scenes:[
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🎨', progress:80,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/7.png', progress:80,
         text:`RAMLで、ひたすら作った。
 
 ゼミで学んで、仲間に見せて、フィードバックをもらう。
@@ -594,7 +595,7 @@ AI画像、AI動画。
 ってなるかもしれない。`
       },
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'📩', progress:88,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/hyoushi.png', progress:88,
         text:`ある日、メッセージが届く。
 
 「<hi>AI動画の制作をお願いしたいのですが</hi>」
@@ -613,7 +614,7 @@ AI画像、AI動画。
   explore:{
     scenes:[
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'🌱', progress:80,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/7.png', progress:80,
         text:`最初は何がしたいかわからなかった。
 
 でもRAMLのゼミに参加し続けるうちに、
@@ -623,7 +624,7 @@ AI画像、AI動画。
 なんてことも、夢じゃない。`
       },
       {
-        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'💡', progress:88,
+        type:'scene', chapter:'CHAPTER 5 ── 3ヶ月後', icon:'img/hyoushi.png', progress:88,
         text:`「SNSの発信にAIを使っていきたい」
 
 みたいな答えが、3ヶ月後に出てくる——
@@ -679,11 +680,18 @@ function setProgress(p) {
   if (m) document.getElementById('chapter-label').textContent = 'Ch.' + m[1];
 }
 
+function renderIcon(icon) {
+  if (icon && (icon.endsWith('.png') || icon.endsWith('.jpg'))) {
+    return `<img src="${icon}" alt="">`;
+  }
+  return icon;
+}
+
 function renderScene(s) {
   const c = document.getElementById('scene-container');
   c.innerHTML = `
     <div class="scene-wrap" onclick="tapScene()">
-      <div class="scene-icon">${s.icon}</div>
+      <div class="scene-icon">${renderIcon(s.icon)}</div>
       <div class="scene-chapter">${s.chapter}</div>
       <div class="scene-text typewriter-cursor" id="stext"></div>
       <div class="tap-hint" id="taph" style="display:none">タップして続ける ▼</div>
