@@ -396,7 +396,9 @@ SNSに1本の動画が流れてきた。
 <em>「あ、全部同じだ（笑）」</em>
 
 でも諦めずに続けたら——
-note販売、セミナー登壇、動画制作の仕事につながったって。
+Threadsフォロワー2,200人超。
+月間インプレッション500万回。
+有料noteで月6桁収益。
 
 ……え、まじで？`
   }
@@ -766,11 +768,16 @@ function showEnding(e) {
       <h2 class="ending-h2">${e.endTitle}</h2>
       <p class="ending-sub">${e.endSub.replace(/\n/g,'<br>')}</p>
       <div class="price-box">
-        <div class="price-label">月額</div>
-        <div><span class="price-num">3,980</span><span style="font-size:16px;color:var(--muted);margin-left:4px;">円</span></div>
+        <div class="price-label">今回限定価格 / 月額</div>
+        <div><span class="price-num">3,480</span><span style="font-size:16px;color:var(--muted);margin-left:4px;">円</span></div>
+        <div class="price-cross">通常 3,980円</div>
         <div class="price-note">週1セミナー・無制限質問・月刊テーマ・仲間<br>全部入りで、コーヒー1杯/日以下<br><span style="color:#F87171;font-weight:bold;">⚠️ 募集は5月23日（金）23:59まで</span></div>
       </div>
-      <a href="${RAML_URL}" class="btn-cta">🌊 RAMLの仲間になる</a>
+      <div style="background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.25);border-radius:12px;padding:16px;margin-bottom:16px;font-size:14px;line-height:1.9;text-align:left;">
+        <div style="color:#22D3EE;font-weight:bold;margin-bottom:6px;">🎁 今回入会限定の5大特典つき</div>
+        画像生成プロンプト集・Threads投稿テンプレート・<br>目的別AI活用マップなど。詳しくは入会ページで確認！
+      </div>
+      <a href="${RAML_URL}" class="btn-cta">🌊 RAMLの仲間になる・特典を確認する</a>
       <button class="btn-share" onclick="restart()" style="width:100%;margin-top:4px;">🔄 もう一度</button>
     </div>`;
 }
